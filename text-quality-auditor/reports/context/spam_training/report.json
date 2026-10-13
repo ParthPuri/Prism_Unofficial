@@ -1,0 +1,511 @@
+{
+  "engine_version": "0.2.0",
+  "prompt_version": "text-policy-v2-context-utility",
+  "input_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973",
+  "config_sha256": "f24add366896701b2692e4c890be3d181dd735d3271a88dc797269271d4dc017",
+  "policy_sha256": "748cbf0ac256aa52174d4ee03e2029bea868450ecf21f324ea8f234c6a83e672",
+  "config": {
+    "text_column": "text",
+    "label_column": "label",
+    "split_column": "split",
+    "group_column": null,
+    "allowed_labels": [
+      "ham",
+      "spam"
+    ],
+    "require_redacted": false,
+    "expected_purpose": null
+  },
+  "profile": {
+    "rows": 5574,
+    "nonempty_text_rows": 5574,
+    "label_classes_observed": 2,
+    "minimum_observed_class_count": 747,
+    "recognized_split_counts": {
+      "test": 580,
+      "train": 4413,
+      "validation": 581
+    },
+    "has_labels": true,
+    "has_allowed_label_vocabulary": true,
+    "has_splits": true,
+    "has_groups": false,
+    "require_redacted": false
+  },
+  "quality_index": 99.68604233943309,
+  "evaluated_weight_fraction": 1.0,
+  "measured_weight_score": 99.68604233943309,
+  "acceptance_score": 90,
+  "decision": "CHECKS_PASSED_REVIEW_REQUIRED",
+  "blockers": [],
+  "metrics": [
+    {
+      "metric": "text_type",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a string text value.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.03,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 3.0
+    },
+    {
+      "metric": "text_completeness",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with nonempty string text after whitespace stripping.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.12,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 12.0
+    },
+    {
+      "metric": "label_completeness",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a nonempty scalar label.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.12,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 12.0
+    },
+    {
+      "metric": "label_consistency",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Conflicting labels require review; context-dependent ambiguity is possible.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.15,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 15.0
+    },
+    {
+      "metric": "label_validity",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of nonempty scalar labels in the user-supplied allowed label vocabulary.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.08,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 8.0
+    },
+    {
+      "metric": "split_completeness",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a recognized train/validation/test split.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.05,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 5.0
+    },
+    {
+      "metric": "split_disjointness",
+      "score": 1.0,
+      "evaluated_rows": 1161,
+      "good_rows": 1161,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Counts evaluation rows shared across recognized splits; normalization-based overlap, not semantic leakage.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.25,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.99,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 25.0
+    },
+    {
+      "metric": "encoding_cleanliness",
+      "score": 0.9937208467886617,
+      "evaluated_rows": 5574,
+      "good_rows": 5539,
+      "bad_rows": 35,
+      "issue_row_ids": [
+        19,
+        458,
+        794,
+        821,
+        833,
+        842,
+        1045,
+        1050,
+        1267,
+        1725
+      ],
+      "details": "Fraction of nonempty texts without replacement characters or unexpected controls; heuristic, not proof of correct encoding.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.05,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 0.9372084678866168,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 4.686042339433084
+    },
+    {
+      "metric": "class_support",
+      "score": 1.0,
+      "evaluated_rows": 4413,
+      "minimum_class_examples": 585,
+      "target_minimum": 20,
+      "issue_row_ids": [],
+      "details": "Support adequacy against a provisional target; not semantic label accuracy or representativeness.",
+      "executor": "local_sqlite",
+      "weight": 0.15,
+      "pass_min": 1,
+      "gate": false,
+      "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 15.0
+    }
+  ],
+  "policy": {
+    "version": 2,
+    "parameters": {
+      "min_chars": 1,
+      "max_chars": 2000,
+      "min_class_examples": 20
+    },
+    "acceptance_score": 90,
+    "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+    "context": {
+      "purpose": "supervised_training",
+      "privacy": "retain",
+      "description": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+      "assumptions": [
+        "Public SMS content is permitted for this example.",
+        "Only implemented structural quality dimensions are assessed."
+      ]
+    },
+    "metrics": [
+      {
+        "name": "text_type",
+        "weight": 0.03,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "text_completeness",
+        "weight": 0.12,
+        "pass_min": 0.99,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "label_completeness",
+        "weight": 0.12,
+        "pass_min": 0.99,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "label_consistency",
+        "weight": 0.15,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "label_validity",
+        "weight": 0.08,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "split_completeness",
+        "weight": 0.05,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "split_disjointness",
+        "weight": 0.25,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.99,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "encoding_cleanliness",
+        "weight": 0.05,
+        "pass_min": 0.99,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0.9,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      {
+        "name": "class_support",
+        "weight": 0.15,
+        "pass_min": 1,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0,
+          "good": 1
+        },
+        "rationale": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      }
+    ]
+  },
+  "context": {
+    "purpose": "supervised_training",
+    "privacy": "retain",
+    "description": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "limits": [
+    "Provisional policy score, not a calibrated probability of fitness or a production certification.",
+    "Cannot prove semantic label correctness, fairness, deployment representativeness, or future drift.",
+    "Text/group overlap is not exhaustive leakage detection; no embeddings or temporal checks in v0.1.",
+    "No raw texts or label names were sent to the planner. Business use case text is sent as entered.",
+    "Full scan of eligible rows. Missing eligibility is shown explicitly; no sampling confidence claimed.",
+    "AI-interpreted context must be reviewed. Use --purpose to constrain task scope. Utility anchors are provisional and require downstream calibration."
+  ],
+  "planner": {
+    "source": "explicit_context_demo"
+  },
+  "backend": "gx",
+  "gx_expectations": [
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "typ",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_type",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "c066b5c4-6819-4780-b123-f21292386f2d",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "nonempty",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_completeness",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "3f4c085c-d843-4086-ace1-fae51ebac79f",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "has_label",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "label_completeness",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "0df11ef4-edd6-4ea2-aa54-e3ef49234d31",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "label_ok",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "label_validity",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "257aa915-6af4-43f9-9db5-955b60f2a0bf",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "split_ok",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "split_completeness",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "8c396273-326e-4f30-9584-a4384dc34400",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "clean",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "encoding_cleanliness",
+        "business_reason": "Supervised SMS spam classifier. Preserve legitimate repeated campaigns and phone numbers; require independent train/evaluation splits."
+      },
+      "id": "4358efcf-74af-4122-b6f3-05790b1ff20f",
+      "severity": "warning"
+    }
+  ]
+}

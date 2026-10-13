@@ -1,0 +1,25 @@
+{
+  "publisher": "UCI Machine Learning Repository",
+  "doi": "10.24432/C5CC84",
+  "authors": "Tiago Almeida and Jos Hidalgo",
+  "license": "CC BY 4.0",
+  "citation": "Almeida, T. & Hidalgo, J. (2011). SMS Spam Collection [Dataset]. UCI Machine Learning Repository.",
+  "publisher_url": "https://archive.ics.uci.edu/dataset/228/sms+spam+collection",
+  "transformation": "Tab-delimited messages converted to CSV; deterministic 80/10/10 approximate splits grouped by normalized text hash. Not stratified or publisher-provided; preserve duplicate records for auditing.",
+  "catalog_count_note": "UCI lists 5,574 instances; actual parsed file row count is recorded below. Do not fabricate rows to match catalog metadata.",
+  "sources": [
+    {
+      "url": "https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip",
+      "sha256": "1587ea43e58e82b14ff1f5425c88e17f8496bfcdb67a583dbff9eefaf9963ce3",
+      "bytes": 203415
+    }
+  ],
+  "parsed_rows": 5574,
+  "split_counts": {
+    "train": 4413,
+    "test": 580,
+    "validation": 581
+  },
+  "label_count": 2,
+  "processed_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973"
+}

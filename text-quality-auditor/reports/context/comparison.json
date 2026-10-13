@@ -1,0 +1,20 @@
+[
+  {
+    "context": "spam_training",
+    "quality_index": 99.68604233943309,
+    "decision": "CHECKS_PASSED_REVIEW_REQUIRED",
+    "input_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973"
+  },
+  {
+    "context": "retrieval_corpus",
+    "quality_index": 62.145676354503024,
+    "decision": "REVIEW_REQUIRED",
+    "input_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973"
+  },
+  {
+    "context": "event_monitoring",
+    "quality_index": 98.74416935773233,
+    "decision": "CHECKS_PASSED_REVIEW_REQUIRED",
+    "input_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973"
+  }
+]

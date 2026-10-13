@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "parameters": {
+    "min_chars": 1,
+    "max_chars": 2000,
+    "min_class_examples": 20
+  },
+  "acceptance_score": 90,
+  "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+  "context": {
+    "purpose": "log_monitoring",
+    "privacy": "retain",
+    "description": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "metrics": [
+    {
+      "name": "text_type",
+      "weight": 0.2,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+    },
+    {
+      "name": "text_completeness",
+      "weight": 0.4,
+      "pass_min": 0.99,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+    },
+    {
+      "name": "encoding_cleanliness",
+      "weight": 0.2,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+    },
+    {
+      "name": "length_validity",
+      "weight": 0.2,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+    }
+  ]
+}

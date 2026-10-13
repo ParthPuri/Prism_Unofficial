@@ -1,0 +1,587 @@
+{
+  "engine_version": "0.2.0",
+  "prompt_version": "text-policy-v2-context-utility",
+  "input_sha256": "7ddcf1f00b7b2bb8dddc3646116ff0a31a5c322e498fbad6ab8f8b06131567af",
+  "config_sha256": "d6f308bea278675a4d70c884907a56e5fcff98febddfbd113d348eaf361075e4",
+  "policy_sha256": "21aba505fb195b26ba8b46f3f63e93c03aadbb1dadee9130ee96383e27d6f991",
+  "config": {
+    "text_column": "text",
+    "label_column": "label",
+    "split_column": "split",
+    "group_column": null,
+    "allowed_labels": [
+      "card_arrival",
+      "card_linking",
+      "exchange_rate",
+      "card_payment_wrong_exchange_rate",
+      "extra_charge_on_statement",
+      "pending_cash_withdrawal",
+      "fiat_currency_support",
+      "card_delivery_estimate",
+      "automatic_top_up",
+      "card_not_working",
+      "exchange_via_app",
+      "lost_or_stolen_card",
+      "age_limit",
+      "pin_blocked",
+      "contactless_not_working",
+      "top_up_by_bank_transfer_charge",
+      "pending_top_up",
+      "cancel_transfer",
+      "top_up_limits",
+      "wrong_amount_of_cash_received",
+      "card_payment_fee_charged",
+      "transfer_not_received_by_recipient",
+      "supported_cards_and_currencies",
+      "getting_virtual_card",
+      "card_acceptance",
+      "top_up_reverted",
+      "balance_not_updated_after_cheque_or_cash_deposit",
+      "card_payment_not_recognised",
+      "edit_personal_details",
+      "why_verify_identity",
+      "unable_to_verify_identity",
+      "get_physical_card",
+      "visa_or_mastercard",
+      "topping_up_by_card",
+      "disposable_card_limits",
+      "compromised_card",
+      "atm_support",
+      "direct_debit_payment_not_recognised",
+      "passcode_forgotten",
+      "declined_cash_withdrawal",
+      "pending_card_payment",
+      "lost_or_stolen_phone",
+      "request_refund",
+      "declined_transfer",
+      "Refund_not_showing_up",
+      "declined_card_payment",
+      "pending_transfer",
+      "terminate_account",
+      "card_swallowed",
+      "transaction_charged_twice",
+      "verify_source_of_funds",
+      "transfer_timing",
+      "reverted_card_payment?",
+      "change_pin",
+      "beneficiary_not_allowed",
+      "transfer_fee_charged",
+      "receiving_money",
+      "failed_transfer",
+      "transfer_into_account",
+      "verify_top_up",
+      "getting_spare_card",
+      "top_up_by_cash_or_cheque",
+      "order_physical_card",
+      "virtual_card_not_working",
+      "wrong_exchange_rate_for_cash_withdrawal",
+      "get_disposable_virtual_card",
+      "top_up_failed",
+      "balance_not_updated_after_bank_transfer",
+      "cash_withdrawal_not_recognised",
+      "exchange_charge",
+      "top_up_by_card_charge",
+      "activate_my_card",
+      "cash_withdrawal_charge",
+      "card_about_to_expire",
+      "apple_pay_or_google_pay",
+      "verify_my_identity",
+      "country_support"
+    ],
+    "require_redacted": false,
+    "expected_purpose": "supervised_training"
+  },
+  "profile": {
+    "rows": 13083,
+    "nonempty_text_rows": 13083,
+    "label_classes_observed": 77,
+    "minimum_observed_class_count": 75,
+    "recognized_split_counts": {
+      "test": 3080,
+      "train": 10003,
+      "validation": 0
+    },
+    "has_labels": true,
+    "has_allowed_label_vocabulary": true,
+    "has_splits": true,
+    "has_groups": false,
+    "require_redacted": false
+  },
+  "quality_index": 94.31818181818171,
+  "evaluated_weight_fraction": 1.0,
+  "measured_weight_score": 94.31818181818171,
+  "acceptance_score": 90,
+  "decision": "BLOCKED",
+  "blockers": [
+    "split_disjointness"
+  ],
+  "metrics": [
+    {
+      "metric": "text_type",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a string text value.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.03,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 3.0
+    },
+    {
+      "metric": "text_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with nonempty string text after whitespace stripping.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.12,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 12.0
+    },
+    {
+      "metric": "label_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a nonempty scalar label.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.12,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 12.0
+    },
+    {
+      "metric": "label_consistency",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Conflicting labels require review; context-dependent ambiguity is possible.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.15,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 15.0
+    },
+    {
+      "metric": "label_validity",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of nonempty scalar labels in the user-supplied allowed label vocabulary.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.08,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 8.0
+    },
+    {
+      "metric": "split_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a recognized train/validation/test split.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.05,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 5.0
+    },
+    {
+      "metric": "split_disjointness",
+      "score": 0.9977272727272727,
+      "evaluated_rows": 3080,
+      "good_rows": 3073,
+      "bad_rows": 7,
+      "issue_row_ids": [
+        10558,
+        10980,
+        10981,
+        11436,
+        11478,
+        12153,
+        13074
+      ],
+      "details": "Counts evaluation rows shared across recognized splits; normalization-based overlap, not semantic leakage.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.25,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 0.7727272727272687,
+      "utility": {
+        "type": "linear",
+        "bad": 0.99,
+        "good": 1
+      },
+      "status": "FAIL",
+      "weighted_points": 19.318181818181717
+    },
+    {
+      "metric": "encoding_cleanliness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of nonempty texts without replacement characters or unexpected controls; heuristic, not proof of correct encoding.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.05,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 5.0
+    },
+    {
+      "metric": "class_support",
+      "score": 1.0,
+      "evaluated_rows": 10003,
+      "minimum_class_examples": 35,
+      "target_minimum": 20,
+      "issue_row_ids": [],
+      "details": "Support adequacy against a provisional target; not semantic label accuracy or representativeness.",
+      "executor": "local_sqlite",
+      "weight": 0.15,
+      "pass_min": 1,
+      "gate": false,
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 15.0
+    }
+  ],
+  "policy": {
+    "version": 2,
+    "parameters": {
+      "min_chars": 1,
+      "max_chars": 2000,
+      "min_class_examples": 20
+    },
+    "acceptance_score": 90,
+    "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+    "context": {
+      "purpose": "supervised_training",
+      "privacy": "retain",
+      "description": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+      "assumptions": [
+        "Public SMS content is permitted for this example.",
+        "Only implemented structural quality dimensions are assessed."
+      ]
+    },
+    "metrics": [
+      {
+        "name": "text_type",
+        "weight": 0.03,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "text_completeness",
+        "weight": 0.12,
+        "pass_min": 0.99,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "label_completeness",
+        "weight": 0.12,
+        "pass_min": 0.99,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "label_consistency",
+        "weight": 0.15,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "label_validity",
+        "weight": 0.08,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "split_completeness",
+        "weight": 0.05,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "split_disjointness",
+        "weight": 0.25,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.99,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "encoding_cleanliness",
+        "weight": 0.05,
+        "pass_min": 0.99,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0.9,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      {
+        "name": "class_support",
+        "weight": 0.15,
+        "pass_min": 1,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0,
+          "good": 1
+        },
+        "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      }
+    ]
+  },
+  "context": {
+    "purpose": "supervised_training",
+    "privacy": "retain",
+    "description": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "limits": [
+    "Provisional policy score, not a calibrated probability of fitness or a production certification.",
+    "Cannot prove semantic label correctness, fairness, deployment representativeness, or future drift.",
+    "Text/group overlap is not exhaustive leakage detection; no embeddings or temporal checks in v0.1.",
+    "No raw texts or label names were sent to the planner. Business use case text is sent as entered.",
+    "Full scan of eligible rows. Missing eligibility is shown explicitly; no sampling confidence claimed.",
+    "AI-interpreted context must be reviewed. Use --purpose to constrain task scope. Utility anchors are provisional and require downstream calibration."
+  ],
+  "backend": "gx",
+  "gx_expectations": [
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "typ",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_type",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "eeb0df58-67de-4f2e-b95e-41915a2694ce",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "nonempty",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_completeness",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "0d1e263f-0a3c-434a-8214-10411f1248ff",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "has_label",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "label_completeness",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "a0993507-f054-4388-a1f3-1030b9b9811f",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "label_ok",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "label_validity",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "7805a049-6b96-4229-9bc8-23e45b3240be",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "split_ok",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "split_completeness",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "7603a558-4070-40f5-9660-a95730c76e27",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "clean",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "encoding_cleanliness",
+        "business_reason": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+      },
+      "id": "e432df71-7f1a-4840-be6f-8a26d1c0db5c",
+      "severity": "warning"
+    }
+  ],
+  "planner": {
+    "source": "explicit_policy_file"
+  },
+  "created_utc": "2026-10-09T01:28:08.233697+00:00",
+  "elapsed_seconds": 2.082
+}

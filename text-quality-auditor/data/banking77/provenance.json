@@ -1,0 +1,32 @@
+{
+  "publisher": "PolyAI",
+  "license": "CC BY 4.0",
+  "citation": "Casanueva et al. (2020). Efficient Intent Detection with Dual Sentence Encoders. ACL NLP for ConvAI.",
+  "publisher_url": "https://github.com/PolyAI-LDN/task-specific-datasets",
+  "transformation": "category column renamed label; train/test files concatenated with explicit split column; publisher splits and all rows preserved.",
+  "known_limit": "No official validation split in these files; do not tune downstream models on test data.",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/train.csv",
+      "sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b",
+      "bytes": 839073
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/test.csv",
+      "sha256": "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+      "bytes": 239961
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/categories.json",
+      "sha256": "53261da888122daf2d120d925458631d9619e15d82e56052e7a42e535ce32b63",
+      "bytes": 2036
+    }
+  ],
+  "parsed_rows": 13083,
+  "split_counts": {
+    "train": 10003,
+    "test": 3080
+  },
+  "label_count": 77,
+  "processed_sha256": "7ddcf1f00b7b2bb8dddc3646116ff0a31a5c322e498fbad6ab8f8b06131567af"
+}

@@ -1,0 +1,462 @@
+{
+  "engine_version": "0.3.0",
+  "prompt_version": "text-policy-v2-context-utility",
+  "input_sha256": "7ddcf1f00b7b2bb8dddc3646116ff0a31a5c322e498fbad6ab8f8b06131567af",
+  "config_sha256": "3e0750c7997ddda7466b2ceb2d7bb3a371a27fac9a6a18664eb7a95f36023892",
+  "policy_sha256": "48be18daa077fab759da534a88906f18a9218e60b606bffae0b9be1f6c605f3e",
+  "config": {
+    "text_column": "text",
+    "label_column": "label",
+    "split_column": "split",
+    "group_column": null,
+    "allowed_labels": [
+      "card_arrival",
+      "card_linking",
+      "exchange_rate",
+      "card_payment_wrong_exchange_rate",
+      "extra_charge_on_statement",
+      "pending_cash_withdrawal",
+      "fiat_currency_support",
+      "card_delivery_estimate",
+      "automatic_top_up",
+      "card_not_working",
+      "exchange_via_app",
+      "lost_or_stolen_card",
+      "age_limit",
+      "pin_blocked",
+      "contactless_not_working",
+      "top_up_by_bank_transfer_charge",
+      "pending_top_up",
+      "cancel_transfer",
+      "top_up_limits",
+      "wrong_amount_of_cash_received",
+      "card_payment_fee_charged",
+      "transfer_not_received_by_recipient",
+      "supported_cards_and_currencies",
+      "getting_virtual_card",
+      "card_acceptance",
+      "top_up_reverted",
+      "balance_not_updated_after_cheque_or_cash_deposit",
+      "card_payment_not_recognised",
+      "edit_personal_details",
+      "why_verify_identity",
+      "unable_to_verify_identity",
+      "get_physical_card",
+      "visa_or_mastercard",
+      "topping_up_by_card",
+      "disposable_card_limits",
+      "compromised_card",
+      "atm_support",
+      "direct_debit_payment_not_recognised",
+      "passcode_forgotten",
+      "declined_cash_withdrawal",
+      "pending_card_payment",
+      "lost_or_stolen_phone",
+      "request_refund",
+      "declined_transfer",
+      "Refund_not_showing_up",
+      "declined_card_payment",
+      "pending_transfer",
+      "terminate_account",
+      "card_swallowed",
+      "transaction_charged_twice",
+      "verify_source_of_funds",
+      "transfer_timing",
+      "reverted_card_payment?",
+      "change_pin",
+      "beneficiary_not_allowed",
+      "transfer_fee_charged",
+      "receiving_money",
+      "failed_transfer",
+      "transfer_into_account",
+      "verify_top_up",
+      "getting_spare_card",
+      "top_up_by_cash_or_cheque",
+      "order_physical_card",
+      "virtual_card_not_working",
+      "wrong_exchange_rate_for_cash_withdrawal",
+      "get_disposable_virtual_card",
+      "top_up_failed",
+      "balance_not_updated_after_bank_transfer",
+      "cash_withdrawal_not_recognised",
+      "exchange_charge",
+      "top_up_by_card_charge",
+      "activate_my_card",
+      "cash_withdrawal_charge",
+      "card_about_to_expire",
+      "apple_pay_or_google_pay",
+      "verify_my_identity",
+      "country_support"
+    ],
+    "require_redacted": false,
+    "expected_purpose": null
+  },
+  "profile": {
+    "rows": 13083,
+    "nonempty_text_rows": 13083,
+    "label_classes_observed": 77,
+    "minimum_observed_class_count": 75,
+    "recognized_split_counts": {
+      "test": 3080,
+      "train": 10003,
+      "validation": 0
+    },
+    "has_labels": true,
+    "has_allowed_label_vocabulary": true,
+    "has_splits": true,
+    "has_groups": false,
+    "require_redacted": false
+  },
+  "quality_index": 99.93676127243543,
+  "evaluated_weight_fraction": 1.0,
+  "measured_weight_score": 99.93676127243543,
+  "acceptance_score": 90,
+  "decision": "BLOCKED",
+  "blockers": [
+    "split_disjointness"
+  ],
+  "metrics": [
+    {
+      "metric": "text_type",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.03,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 3.0
+    },
+    {
+      "metric": "text_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.14,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 14.000000000000002
+    },
+    {
+      "metric": "encoding_cleanliness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.03,
+      "pass_min": 1,
+      "gate": false,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 3.0
+    },
+    {
+      "metric": "normalized_uniqueness",
+      "score": 0.9990827791790874,
+      "evaluated_rows": 13083,
+      "good_rows": 13071,
+      "bad_rows": 12,
+      "issue_row_ids": [],
+      "details": "Normalized repetition is a signal; recurring messages can be legitimate.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.07,
+      "pass_min": 0.85,
+      "gate": false,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 0.9990827791790874,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 6.993579454253613
+    },
+    {
+      "metric": "length_validity",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.03,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 3.0
+    },
+    {
+      "metric": "label_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.13,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 13.0
+    },
+    {
+      "metric": "label_consistency",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Conflicting labels require review; context-dependent ambiguity is possible.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.15,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 15.0
+    },
+    {
+      "metric": "label_validity",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.08,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 8.0
+    },
+    {
+      "metric": "split_completeness",
+      "score": 1.0,
+      "evaluated_rows": 13083,
+      "good_rows": 13083,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.04,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 4.0
+    },
+    {
+      "metric": "split_disjointness",
+      "score": 0.9977272727272727,
+      "evaluated_rows": 3080,
+      "good_rows": 3073,
+      "bad_rows": 7,
+      "issue_row_ids": [
+        10558,
+        10980,
+        10981,
+        11436,
+        11478,
+        12153,
+        13074
+      ],
+      "details": "Counts evaluation rows shared across recognized splits; normalization-based overlap, not semantic leakage.",
+      "reason": null,
+      "executor": "local_sqlite",
+      "weight": 0.25,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 0.9977272727272727,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "FAIL",
+      "weighted_points": 24.943181818181817
+    },
+    {
+      "metric": "class_support",
+      "score": 1.0,
+      "evaluated_rows": 10003,
+      "minimum_class_examples": 35,
+      "target_minimum": 20,
+      "issue_row_ids": [],
+      "details": "Support adequacy against a provisional target; not semantic label accuracy or representativeness.",
+      "executor": "local_sqlite",
+      "weight": 0.05,
+      "pass_min": 1,
+      "gate": false,
+      "rationale": "Illustrative conservative classification policy; validate against downstream performance before production.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "identity"
+      },
+      "status": "PASS",
+      "weighted_points": 5.0
+    }
+  ],
+  "policy": {
+    "version": 1,
+    "metrics": [
+      {
+        "name": "text_type",
+        "weight": 0.03,
+        "pass_min": 1,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "text_completeness",
+        "weight": 0.14,
+        "pass_min": 0.99,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "encoding_cleanliness",
+        "weight": 0.03,
+        "pass_min": 1,
+        "gate": false,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "normalized_uniqueness",
+        "weight": 0.07,
+        "pass_min": 0.85,
+        "gate": false,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "length_validity",
+        "weight": 0.03,
+        "pass_min": 0.99,
+        "gate": false,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "label_completeness",
+        "weight": 0.13,
+        "pass_min": 0.99,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "label_consistency",
+        "weight": 0.15,
+        "pass_min": 1,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "label_validity",
+        "weight": 0.08,
+        "pass_min": 1,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "split_completeness",
+        "weight": 0.04,
+        "pass_min": 1,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "split_disjointness",
+        "weight": 0.25,
+        "pass_min": 1,
+        "gate": true,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      },
+      {
+        "name": "class_support",
+        "weight": 0.05,
+        "pass_min": 1,
+        "gate": false,
+        "rationale": "Illustrative conservative classification policy; validate against downstream performance before production."
+      }
+    ],
+    "parameters": {
+      "min_chars": 1,
+      "max_chars": 2000,
+      "min_class_examples": 20
+    },
+    "acceptance_score": 90,
+    "rationale": "Handwritten demonstration policy, not AI-generated or empirically calibrated. Highlights completeness, label consistency and split independence for text classification. Duplicate rates and class support require business review."
+  },
+  "context": null,
+  "limits": [
+    "Provisional policy score, not a calibrated probability of fitness or a production certification.",
+    "Cannot prove semantic label correctness, fairness, deployment representativeness, or future drift.",
+    "Text/group overlap is not exhaustive leakage detection; no embeddings or temporal checks in v0.1.",
+    "No raw texts or label names were sent to the planner. Business use case text is sent as entered.",
+    "Full scan of eligible rows. Missing eligibility is shown explicitly; no sampling confidence claimed.",
+    "AI-interpreted context must be reviewed. Use --purpose to constrain task scope. Utility anchors are provisional and require downstream calibration."
+  ],
+  "backend": "local",
+  "planner": {
+    "source": "explicit_policy_file"
+  },
+  "created_utc": "2026-10-09T04:49:22.449924+00:00",
+  "elapsed_seconds": 0.281
+}

@@ -1,0 +1,304 @@
+{
+  "engine_version": "0.2.0",
+  "prompt_version": "text-policy-v2-context-utility",
+  "input_sha256": "b5680afc8b1c19cd7bc9aed7cac8d256d707820af326f7886a940fb40b3f2973",
+  "config_sha256": "f24add366896701b2692e4c890be3d181dd735d3271a88dc797269271d4dc017",
+  "policy_sha256": "8913ebffc76a566f1005ac04335b2c4a037c33f39b7d9cc023db624e084a5d88",
+  "config": {
+    "text_column": "text",
+    "label_column": "label",
+    "split_column": "split",
+    "group_column": null,
+    "allowed_labels": [
+      "ham",
+      "spam"
+    ],
+    "require_redacted": false,
+    "expected_purpose": null
+  },
+  "profile": {
+    "rows": 5574,
+    "nonempty_text_rows": 5574,
+    "label_classes_observed": 2,
+    "minimum_observed_class_count": 747,
+    "recognized_split_counts": {
+      "test": 580,
+      "train": 4413,
+      "validation": 581
+    },
+    "has_labels": true,
+    "has_allowed_label_vocabulary": true,
+    "has_splits": true,
+    "has_groups": false,
+    "require_redacted": false
+  },
+  "quality_index": 98.74416935773233,
+  "evaluated_weight_fraction": 1.0,
+  "measured_weight_score": 98.74416935773233,
+  "acceptance_score": 90,
+  "decision": "CHECKS_PASSED_REVIEW_REQUIRED",
+  "blockers": [],
+  "metrics": [
+    {
+      "metric": "text_type",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with a string text value.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.2,
+      "pass_min": 1,
+      "gate": true,
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 20.0
+    },
+    {
+      "metric": "text_completeness",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of rows with nonempty string text after whitespace stripping.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.4,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 40.0
+    },
+    {
+      "metric": "encoding_cleanliness",
+      "score": 0.9937208467886617,
+      "evaluated_rows": 5574,
+      "good_rows": 5539,
+      "bad_rows": 35,
+      "issue_row_ids": [
+        19,
+        458,
+        794,
+        821,
+        833,
+        842,
+        1045,
+        1050,
+        1267,
+        1725
+      ],
+      "details": "Fraction of nonempty texts without replacement characters or unexpected controls; heuristic, not proof of correct encoding.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.2,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+      "contextual_score": 0.9372084678866168,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 18.744169357732336
+    },
+    {
+      "metric": "length_validity",
+      "score": 1.0,
+      "evaluated_rows": 5574,
+      "good_rows": 5574,
+      "bad_rows": 0,
+      "issue_row_ids": [],
+      "details": "Fraction of nonempty texts within policy character limits; not model token limits.",
+      "executor": "great_expectations",
+      "gx_success": true,
+      "gx_version": "1.24.0",
+      "weight": 0.2,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+      "contextual_score": 1.0,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "status": "PASS",
+      "weighted_points": 20.0
+    }
+  ],
+  "policy": {
+    "version": 2,
+    "parameters": {
+      "min_chars": 1,
+      "max_chars": 2000,
+      "min_class_examples": 20
+    },
+    "acceptance_score": 90,
+    "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+    "context": {
+      "purpose": "log_monitoring",
+      "privacy": "retain",
+      "description": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+      "assumptions": [
+        "Public SMS content is permitted for this example.",
+        "Only implemented structural quality dimensions are assessed."
+      ]
+    },
+    "metrics": [
+      {
+        "name": "text_type",
+        "weight": 0.2,
+        "pass_min": 1,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0,
+          "good": 1
+        },
+        "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      {
+        "name": "text_completeness",
+        "weight": 0.4,
+        "pass_min": 0.99,
+        "gate": true,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      {
+        "name": "encoding_cleanliness",
+        "weight": 0.2,
+        "pass_min": 0.99,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0.9,
+          "good": 1
+        },
+        "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      {
+        "name": "length_validity",
+        "weight": 0.2,
+        "pass_min": 0.99,
+        "gate": false,
+        "utility": {
+          "type": "linear",
+          "bad": 0.95,
+          "good": 1
+        },
+        "rationale": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      }
+    ]
+  },
+  "context": {
+    "purpose": "log_monitoring",
+    "privacy": "retain",
+    "description": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "limits": [
+    "Provisional policy score, not a calibrated probability of fitness or a production certification.",
+    "Cannot prove semantic label correctness, fairness, deployment representativeness, or future drift.",
+    "Text/group overlap is not exhaustive leakage detection; no embeddings or temporal checks in v0.1.",
+    "No raw texts or label names were sent to the planner. Business use case text is sent as entered.",
+    "Full scan of eligible rows. Missing eligibility is shown explicitly; no sampling confidence claimed.",
+    "AI-interpreted context must be reviewed. Use --purpose to constrain task scope. Utility anchors are provisional and require downstream calibration."
+  ],
+  "planner": {
+    "source": "explicit_context_demo"
+  },
+  "backend": "gx",
+  "gx_expectations": [
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "typ",
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_type",
+        "business_reason": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      "id": "2e02121d-977b-49e8-98ab-6e89cf8fad62",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "nonempty",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "text_completeness",
+        "business_reason": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      "id": "678a274a-b02d-48dc-9158-ed1fdc736ee7",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "clean",
+        "mostly": 0.99,
+        "value_set": [
+          1
+        ]
+      },
+      "meta": {
+        "metric": "encoding_cleanliness",
+        "business_reason": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      "id": "6eb82f36-1d93-4e5f-85a2-de795d39723b",
+      "severity": "warning"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "n",
+        "mostly": 0.99,
+        "min_value": 1.0,
+        "max_value": 2000.0
+      },
+      "meta": {
+        "metric": "length_validity",
+        "business_reason": "Monitor message-event records. Repeated messages represent real recurring events, so uniqueness is not a quality requirement; labels and training partitions are irrelevant."
+      },
+      "id": "3dfb131a-4146-4fec-b579-ec3ff4377b28",
+      "severity": "warning"
+    }
+  ]
+}

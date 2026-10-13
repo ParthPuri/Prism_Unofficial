@@ -1,0 +1,81 @@
+{
+  "version": 2,
+  "parameters": {
+    "min_chars": 1,
+    "max_chars": 2000,
+    "min_class_examples": 20
+  },
+  "acceptance_score": 90,
+  "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+  "context": {
+    "purpose": "retrieval_corpus",
+    "privacy": "retain",
+    "description": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "metrics": [
+    {
+      "name": "text_type",
+      "weight": 0.05,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "rationale": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed."
+    },
+    {
+      "name": "text_completeness",
+      "weight": 0.15,
+      "pass_min": 0.99,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed."
+    },
+    {
+      "name": "normalized_uniqueness",
+      "weight": 0.5,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "rationale": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed."
+    },
+    {
+      "name": "encoding_cleanliness",
+      "weight": 0.1,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "rationale": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed."
+    },
+    {
+      "name": "length_validity",
+      "weight": 0.2,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Structural suitability as a message retrieval corpus. Redundant normalized entries waste retrieval/storage capacity; relevance and factuality are not assessed."
+    }
+  ]
+}
