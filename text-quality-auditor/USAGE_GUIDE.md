@@ -47,10 +47,10 @@ cd path/to/text-quality-auditor
 
 ```bash
 pip install streamlit plotly
-pip install -e .
+pip install -e ".[arrow]"  # installs textaudit with Parquet & Arrow support
 ```
 
-This installs the dashboard and the auditor engine. It only needs to be done once.
+This installs the dashboard and the auditor engine with all format loaders. It only needs to be done once.
 
 ---
 
@@ -83,18 +83,16 @@ Two real benchmark datasets are included and ready to use:
 
 Select one from the dropdown. No file upload needed.
 
-**Upload my own CSV**
-Click the upload button and select your CSV file.
+**Upload custom dataset**
+Click the upload button and select your dataset file. The auditor natively supports 7 major textual dataset formats:
+- **CSV (`.csv`) & TSV (`.tsv`, `.tab`)**: Standard comma or tab-delimited tabular datasets.
+- **JSON Lines (`.jsonl`, `.ndjson`)**: Streamable newline-delimited JSON objects (ideal for instruction-tuning and conversational datasets).
+- **Structured JSON (`.json`)**: Array of objects `[{"text":...}]`, envelope payloads (`data`, `rows`, `records`), or Hugging Face split mappings (`{"train":[...], "test":[...]}`).
+- **Parquet (`.parquet`)**: Columnar storage format default on Hugging Face Hub (fast, compressed, streamable).
+- **Apache Arrow / Feather (`.arrow`, `.feather`)**: Hugging Face `datasets` in-memory/cache format.
+- **Plain Text (`.txt`)**: Raw text corpora (one document per line) for language modeling or tokenization.
 
-Your CSV must have at minimum a text column. Optionally it can have a label column and a split column (`train` / `test` / `validation`). Example:
-
-```csv
-text,label,split
-My card has not arrived,card_arrival,train
-How do I cancel a transfer,cancel_transfer,test
-```
-
-After selecting or uploading a dataset, set the column names:
+When you upload a file, the dashboard automatically inspects and displays the available columns. Set the column names:
 - **Label column** — the column containing category labels (default: `label`)
 - **Split column** — the column indicating train/test split (default: `split`, leave blank if not present)
 

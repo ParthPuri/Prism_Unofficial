@@ -15,6 +15,8 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 
+from textaudit.loader import get_supported_extensions, inspect_columns
+
 
 @st.cache_data(ttl=300, show_spinner=False)
 def get_available_groq_models(api_key: str) -> list[str]:
@@ -356,14 +358,35 @@ def decision_badge(decision: str) -> str:
     )
 
 
-def gauge_chart(value: float | None) -> go.Figure:
+def gauge_chart(value: float | None, is_blocked: bool = False, raw_value: float | None = None) -> go.Figure:
     v = value if value is not None else 0
+    if is_blocked:
+        color = "#e74c3c"
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=v,
+            number={"suffix": "/100", "font": {"size": 32, "color": color}},
+            title={"text": "Quality Index — 🚫 BLOCKED", "font": {"size": 15, "color": color}},
+            gauge={
+                "axis": {"range": [0, 100], "tickwidth": 1},
+                "bar": {"color": color, "thickness": 0.28},
+                "bgcolor": "white",
+                "steps": [
+                    {"range": [0, 80], "color": "#fdecea"},
+                    {"range": [80, 100], "color": "#f8f9fa"},
+                ],
+            },
+        ))
+        fig.update_layout(height=230, margin=dict(t=30, b=10, l=20, r=20))
+        return fig
+
     color = "#2ecc71" if v >= 95 else "#f39c12" if v >= 80 else "#e74c3c"
+    title_text = "Quality Index — ⚠️ REVIEW" if color == "#f39c12" else "Quality Index — ✅ PASSED" if color == "#2ecc71" else "Quality Index"
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=v,
         number={"suffix": "/100", "font": {"size": 32, "color": color}},
-        title={"text": "Quality Index", "font": {"size": 15}},
+        title={"text": title_text, "font": {"size": 15, "color": color}},
         gauge={
             "axis": {"range": [0, 100], "tickwidth": 1},
             "bar": {"color": color, "thickness": 0.28},
@@ -497,7 +520,7 @@ with st.sidebar:
 
     # ── Step 1: Dataset ──────────────────────────────────────────────────────
     st.markdown("### Step 1 · Dataset")
-    dataset_mode = st.radio("Source", ["Use a bundled example", "Upload my own CSV"],
+    dataset_mode = st.radio("Source", ["Use a bundled example", "Upload custom dataset"],
                             label_visibility="collapsed")
 
     if dataset_mode == "Use a bundled example":
@@ -513,7 +536,11 @@ with st.sidebar:
         uploaded_file       = None
         st.caption(f"💡 {spec['desc']}")
     else:
-        uploaded_file       = st.file_uploader("CSV file", type=["csv"])
+        uploaded_file = st.file_uploader(
+            "Dataset file",
+            type=["csv", "tsv", "tab", "json", "jsonl", "ndjson", "parquet", "arrow", "feather", "txt"],
+            help="Supports CSV, TSV, JSON, JSONL, Parquet, Arrow, and plain TXT"
+        )
         _dataset_path       = None
         _label_col_default  = "label"
         _split_col_default  = "split"
@@ -521,6 +548,26 @@ with st.sidebar:
         _context_preset     = "Custom (type your own)"
         _policy_path        = None
         _require_redacted   = False
+        if uploaded_file is not None:
+            st.caption(f"📄 Loaded file: `{uploaded_file.name}`")
+            try:
+                with tempfile.NamedTemporaryFile(suffix=Path(uploaded_file.name).suffix, delete=False) as tf:
+                    tf.write(uploaded_file.getvalue())
+                    tf_path = Path(tf.name)
+                detected_cols = inspect_columns(tf_path)
+                tf_path.unlink()
+                if detected_cols:
+                    st.caption(f"🔍 Columns: `{', '.join(detected_cols[:10])}`" + ("…" if len(detected_cols) > 10 else ""))
+                    for cand in ["label", "intent", "target", "category", "sentiment", "class"]:
+                        if cand in detected_cols:
+                            _label_col_default = cand
+                            break
+                    for cand in ["split", "partition", "subset", "set"]:
+                        if cand in detected_cols:
+                            _split_col_default = cand
+                            break
+            except Exception:
+                pass
 
     label_col = st.text_input("Label column", value=_label_col_default)
     split_col = st.text_input("Split column (optional)", value=_split_col_default)
@@ -655,7 +702,7 @@ if not run_btn:
     c1, c2, c3 = st.columns(3)
     with c1:
         st.subheader("📂 Dataset")
-        st.markdown("Upload a CSV with `text`, `label`, and `split` columns — or pick a bundled benchmark.")
+        st.markdown("Upload a dataset (`.csv`, `.tsv`, `.json`, `.jsonl`, `.parquet`, `.arrow`, `.txt`) with `text`, `label`, and `split` columns — or pick a bundled benchmark.")
     with c2:
         st.subheader("📝 Business context")
         st.markdown(
@@ -672,8 +719,8 @@ if not run_btn:
 
 # ── validate inputs ───────────────────────────────────────────────────────────
 
-if dataset_mode == "Upload my own CSV" and uploaded_file is None:
-    st.error("Please upload a CSV file before running the audit.")
+if dataset_mode == "Upload custom dataset" and uploaded_file is None:
+    st.error("Please upload a dataset file before running the audit.")
     st.stop()
 
 if use_ai and provider_choice == "Groq (recommended & fast)" and not (groq_api_key and groq_api_key.strip()):
@@ -733,8 +780,10 @@ with st.spinner("Running audit…"):
 
 decision = report["decision"]
 qi       = report["quality_index"]
-metrics  = report["metrics"]
 blockers = report.get("blockers", [])
+is_blocked = (decision == "BLOCKED" or len(blockers) > 0)
+effective_qi = report.get("effective_quality_index", 0.0 if is_blocked else qi)
+metrics  = report["metrics"]
 profile  = report.get("profile", {})
 planner  = report.get("planner", {})
 
@@ -745,20 +794,34 @@ gauge_col, decision_col, profile_col = st.columns([2, 2, 3])
 
 with gauge_col:
     try:
-        st.plotly_chart(gauge_chart(qi), use_container_width=True)
+        st.plotly_chart(gauge_chart(effective_qi, is_blocked=is_blocked, raw_value=qi), use_container_width=True)
     except Exception:
-        v = qi if qi is not None else 0
-        st.metric("Quality Index", f"{v:.1f}/100")
-        st.progress(min(1.0, max(0.0, float(v) / 100.0)))
+        if is_blocked:
+            st.metric("Quality Index", f"{effective_qi:.1f} / 100", delta=f"-{report.get('gate_penalty', 0):.1f} Gate Penalty", delta_color="inverse")
+        else:
+            v = qi if qi is not None else 0
+            st.metric("Quality Index", f"{v:.1f}/100")
+            st.progress(min(1.0, max(0.0, float(v) / 100.0)))
+    if is_blocked and qi is not None:
+        penalty = report.get("gate_penalty", 0.0)
+        st.caption(f"🚫 **Penalized Gate Score:** Effective score is **{effective_qi:.1f}/100** (-{penalty:.1f} pts penalty for {len(blockers)} failed fatal gate{'s' if len(blockers) > 1 else ''}; unpenalized raw points: {qi:.1f}/100).")
+    elif decision == "REVIEW_REQUIRED":
+        st.caption("⚠️ **Review Required:** Passed all fatal gates, but soft quality metrics need review.")
+    elif decision == "CHECKS_PASSED_REVIEW_REQUIRED":
+        st.caption("✅ **Checks Passed:** All gates and quality thresholds satisfied.")
 
 with decision_col:
     st.markdown("### Decision")
     st.markdown(decision_badge(decision), unsafe_allow_html=True)
     st.markdown("&nbsp;", unsafe_allow_html=True)
-    cov = report.get("evaluated_weight_fraction", 1.0)
-    st.metric("Coverage", f"{cov*100:.0f}%",
-              help="Fraction of policy weight with evaluable evidence")
-    st.metric("Elapsed", f"{report.get('elapsed_seconds', 0):.2f}s")
+    if is_blocked:
+        st.metric("Fatal Blockers", f"{len(blockers)} blocker{'s' if len(blockers) > 1 else ''}", help="Non-negotiable gates that failed.")
+        st.metric("Effective Score", f"{effective_qi:.1f} / 100", delta=f"-{report.get('gate_penalty', 0):.1f} Gate Penalty", delta_color="inverse", help="Fatal gate failure penalizes the score into the failing zone.")
+    else:
+        cov = report.get("evaluated_weight_fraction", 1.0)
+        st.metric("Coverage", f"{cov*100:.0f}%",
+                  help="Fraction of policy weight with evaluable evidence")
+        st.metric("Elapsed", f"{report.get('elapsed_seconds', 0):.2f}s")
     src = planner.get("source", "explicit_policy_file")
     st.caption(f"Policy source: `{src}`")
 
@@ -847,13 +910,17 @@ for m in metrics:
     score_str = f"{m['score']*100:.2f}" if m["score"] is not None else "—"
     info = METRIC_INFO.get(m["metric"], {})
     display_name = f"{m['metric']} ({info.get('plain_name', '')})" if info.get("plain_name") else m["metric"]
+    is_gate_failed = m.get("gate") and m["status"] != "PASS"
+    gate_str = "🔒 Fatal Gate (FAILED)" if is_gate_failed else "🔒 Gated (Must Pass)" if m.get("gate") else "📊 Graded"
+    if is_gate_failed:
+        score_str = f"{score_str}% (Disqualified)"
     table_rows.append({
         "Status":         STATUS_EMOJI.get(m["status"], m["status"]),
         "Check Name":     display_name,
         "Score":          score_str,
         "Pass min":       f"{m['pass_min']*100:.0f}",
         "Weight":         f"{m['weight']:.3f}",
-        "Gate":           "🔒 Gated (Must Pass)" if m.get("gate") else "📊 Graded",
+        "Gate":           gate_str,
         "Rows evaluated": m.get("evaluated_rows", "—"),
         "Defect rows":    m.get("bad_rows", 0),
     })

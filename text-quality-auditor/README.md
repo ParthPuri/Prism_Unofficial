@@ -67,6 +67,23 @@ Mandatory gates — text type, text completeness, label completeness, label vali
 
 ---
 
+## Supported dataset formats
+
+The auditor natively supports standard NLP dataset formats from Kaggle and Hugging Face Hub:
+
+| Format | File Extensions | Ecosystem Usage |
+|---|---|---|
+| **Delimited Tabular** | `.csv`, `.tsv`, `.tab` | Kaggle competitions, GLUE/SuperGLUE benchmarks, classical NLP |
+| **Line-Delimited JSON** | `.jsonl`, `.ndjson` | Hugging Face instruction-tuning, conversational pairs, streaming datasets |
+| **Structured JSON** | `.json` | Array of objects, envelope payloads (`data`, `rows`), split mappings |
+| **Apache Parquet** | `.parquet` | Hugging Face Hub default format (FineWeb, C4, SmolLM) |
+| **Apache Arrow** | `.arrow`, `.feather` | Hugging Face `datasets` cache & zero-copy Python data loaders |
+| **Plain Text Corpora** | `.txt` | Unstructured language modeling corpora, tokenizer training sets |
+
+The ingestion subsystem performs zero silent skips: corrupt rows, malformed delimiters, and schema mismatches trigger explicit, diagnostic errors with exact line numbers.
+
+---
+
 ## Datasets included
 
 Two public benchmark datasets are bundled for demonstration:
@@ -177,7 +194,7 @@ Reports are written to the `--out` directory as `report.json`, `report.md`, and 
 python3 -m unittest discover -s tests -v
 ```
 
-36 tests covering gates, scoring, invalid policies, missing evidence, group isolation, privacy scope, and planner caching. 3 tests are skipped when the optional Great Expectations dependency is not installed.
+52 tests covering multi-format ingestion (CSV, TSV, JSON, JSONL, Parquet, Arrow, TXT), gates, scoring, invalid policies, missing evidence, group isolation, privacy scope, and planner caching. 3 tests are skipped when the optional Great Expectations dependency is not installed.
 
 ---
 

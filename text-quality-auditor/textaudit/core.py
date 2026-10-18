@@ -13,6 +13,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Iterator
 
+from .loader import inspect_columns, iter_rows
+
 ENGINE_VERSION = "0.3.0"
 PROMPT_VERSION = "text-policy-v2-context-utility"
 SPLITS = {"train", "validation", "test"}
@@ -75,27 +77,8 @@ class Config:
             raise ValueError("Allowed labels must be nonempty strings.")
 
 
-def rows(path: Path) -> Iterator[dict]:
-    if path.suffix.lower() == ".csv":
-        with path.open(encoding="utf-8-sig", newline="") as f:
-            reader = csv.DictReader(f)
-            if not reader.fieldnames or len(reader.fieldnames) != len(set(reader.fieldnames)):
-                raise ValueError("CSV needs a header with unique column names.")
-            for i, row in enumerate(reader, 2):
-                if None in row or any(v is None for v in row.values()):
-                    raise ValueError(f"Malformed CSV row at line {i}; no rows were silently skipped.")
-                yield row
-    elif path.suffix.lower() == ".jsonl":
-        with path.open(encoding="utf-8-sig") as f:
-            for i, line in enumerate(f, 1):
-                if not line.strip():
-                    raise ValueError(f"Empty JSONL line {i}; no rows were silently skipped.")
-                row = json.loads(line)
-                if not isinstance(row, dict):
-                    raise ValueError(f"JSONL line {i} must be an object.")
-                yield row
-    else:
-        raise ValueError("Supported input formats: UTF-8 CSV and JSONL.")
+def rows(path: Path, text_column: str = "text") -> Iterator[dict]:
+    return iter_rows(path, text_column=text_column)
 
 
 def scalar(value: Any) -> str | None:
@@ -150,7 +133,7 @@ class LocalDataset:
         c = self.config
         batch = []
         required = [x for x in (c.text_column, c.label_column, c.split_column, c.group_column) if x]
-        for i, row in enumerate(rows(self.path), 1):
+        for i, row in enumerate(iter_rows(self.path, text_column=c.text_column), 1):
             if any(k not in row for k in required):
                 raise ValueError(f"Row {i} is missing a configured column.")
             text = row[c.text_column]
@@ -412,15 +395,27 @@ def evaluate(dataset: LocalDataset, policy: dict, metric_runner=None) -> dict:
     complete = math.isclose(coverage,1.0,abs_tol=1e-6,rel_tol=0)
     partial_points = sum(r["weighted_points"] or 0 for r in measured)
     score = partial_points if complete else None
-    blockers = [r["metric"] for r in measured if r["gate"] and r["status"] != "PASS"]
+    failing_gates = [r for r in measured if r["gate"] and r["status"] != "PASS"]
+    blockers = [r["metric"] for r in failing_gates]
     if dataset.count == 0:
         blockers.append("empty_dataset")
     decision = "BLOCKED" if blockers else "INCOMPLETE" if not complete else "REVIEW_REQUIRED" if score < policy["acceptance_score"] or any(r["status"] == "FAIL" for r in measured) else "CHECKS_PASSED_REVIEW_REQUIRED"
+    if score is None or dataset.count == 0:
+        effective_score = 0.0 if dataset.count == 0 else None
+        gate_penalty = 0.0
+    elif blockers:
+        gate_penalty = round(sum(25.0 + 50.0 * (1.0 - (r["score"] or 0.0)) for r in failing_gates), 2)
+        effective_score = max(0.0, min(79.9, round(score - gate_penalty, 2)))
+    else:
+        gate_penalty = 0.0
+        effective_score = score
     return {
         "engine_version":ENGINE_VERSION,"prompt_version":PROMPT_VERSION,
         "input_sha256":dataset.input_sha256,"config_sha256":digest(asdict(dataset.config)),
         "policy_sha256":digest(policy),"config":asdict(dataset.config),"profile":dataset.profile(),
-        "quality_index":score,"evaluated_weight_fraction":coverage,
+        "quality_index":score,"effective_quality_index":effective_score,
+        "raw_quality_index":score,"gate_penalty":gate_penalty,"is_blocked":bool(blockers),
+        "evaluated_weight_fraction":coverage,
         "measured_weight_score":partial_points/coverage if coverage else None,
         "acceptance_score":policy["acceptance_score"],"decision":decision,"blockers":blockers,
         "metrics":measured,"policy":policy,

@@ -110,7 +110,8 @@ def main():
             if not is_detected:
                 all_passed = False
 
-            qi_str = f"{qi:.1f} / 100"
+            eff_qi = report.get("effective_quality_index", qi)
+            qi_str = f"{eff_qi:.1f} [Raw: {qi:.0f}]"
             block_str = f"{len(blockers)} blocker(s)"
             print(f"{spec['file']:<33} {f'Gate: {target}':<25} {qi_str:<16} {dec:<16} {block_str:<12} {status}")
 

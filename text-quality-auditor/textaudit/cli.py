@@ -41,7 +41,7 @@ def markdown(report: dict) -> str:
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="AI-planned, locally computed text dataset quality auditing")
-    parser.add_argument("input",type=Path)
+    parser.add_argument("input", type=Path, help="Input dataset path (.csv, .tsv, .json, .jsonl, .parquet, .arrow, .txt)")
     parser.add_argument("--text-column",default="text")
     parser.add_argument("--label-column")
     parser.add_argument("--split-column")
