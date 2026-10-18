@@ -162,7 +162,7 @@ class LocalDataset:
                               ("split_completeness", c.split_column and not split_ok),
                               ("group_completeness", c.group_column and not group),
                               ("privacy_pattern_clearance", private)]:
-                if flag and len(self.examples.get(key, [])) < 10:
+                if flag and len(self.examples.get(key, [])) < 100:
                     self.examples.setdefault(key, []).append(i)
             batch.append((i,h,label,split,group,len(text) if typ else 0,int(typ),int(nonempty),
                           int(clean),int(private),int(label_ok),int(split_ok)))
@@ -228,64 +228,191 @@ class LocalDataset:
         nonempty = self.number("SELECT SUM(nonempty) FROM r")
         total, good = n, 0
         details = ""
-        example_ids = self.examples.get(name, [])
+        sample_defects = []
+        c = self.config
+
         if name == "text_type":
+            col = c.text_column
             good = self.number("SELECT SUM(typ) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE typ=0 ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Value is null or non-string object"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) containing non-string or null values in column '{col}'." if bad else f"All {total} evaluated rows contain valid string text in column '{col}'."
+            details = "Fraction of rows with a string text value."
+
         elif name == "text_completeness":
+            col = c.text_column
             good = nonempty
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE nonempty=0 ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Blank or whitespace-only text after stripping"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) containing blank or whitespace-only text in column '{col}'." if bad else f"All {total} evaluated rows contain nonempty text in column '{col}'."
+            details = "Fraction of rows with nonempty string text after whitespace stripping."
+
         elif name == "encoding_cleanliness":
+            col = c.text_column
             total, good = nonempty, self.number("SELECT SUM(clean) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE nonempty=1 AND clean=0 ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Contains Unicode replacement character (\ufffd) or unexpected control codes"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) containing Unicode replacement characters or corrupted control codes in column '{col}'." if bad else f"All {total} evaluated text rows have clean UTF-8 encoding."
+            details = "Fraction of nonempty texts without replacement characters or unexpected controls."
+
         elif name == "normalized_uniqueness":
+            col = c.text_column
             total, good = nonempty, self.number("SELECT COUNT(DISTINCT h) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE h IN (SELECT h FROM r WHERE h IS NOT NULL GROUP BY h HAVING COUNT(*) > 1) ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Repeated query phrasing (normalized NFKC duplicate)"} for i in example_ids]
+            cause = f"{bad} row(s) represent repeated duplicate phrasing after NFKC normalization in column '{col}' ({good} unique distinct texts out of {total})." if bad else f"All {total} evaluated rows are uniquely distinct."
             details = "Normalized repetition is a signal; recurring messages can be legitimate."
+
         elif name == "length_validity":
+            col = c.text_column
             total = nonempty
             low, high = parameters["min_chars"], parameters["max_chars"]
-            good = self.number("SELECT COUNT(*) FROM r WHERE nonempty=1 AND n BETWEEN ? AND ?", (low,high))
-            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE nonempty=1 AND (n<? OR n>?) ORDER BY i LIMIT 10", (low,high))]
+            good = self.number("SELECT COUNT(*) FROM r WHERE nonempty=1 AND n BETWEEN ? AND ?", (low, high))
+            bad = total - good
+            rows_res = self.db.execute("SELECT i, n FROM r WHERE nonempty=1 AND (n < ? OR n > ?) ORDER BY i LIMIT 100", (low, high)).fetchall()
+            example_ids = [x[0] for x in rows_res]
+            sample_defects = [{"row_id": i, "column": col, "cause": f"Length is {len_c} chars (violates limits [{low}..{high}])"} for i, len_c in rows_res]
+            cause = f"Failed due to {bad} row(s) outside configured character length limits [{low}..{high}] in column '{col}'." if bad else f"All {total} evaluated text rows meet character length limits [{low}..{high}]."
+            details = f"Fraction of nonempty texts within policy character limits ({low} to {high} chars)."
+
         elif name == "label_completeness":
+            col = c.label_column or "label"
             good = self.number("SELECT COUNT(label) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE label IS NULL ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Missing label (null or blank)"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) missing a target label in column '{col}'." if bad else f"All {total} evaluated rows have non-empty scalar labels."
+            details = "Fraction of rows with a nonempty scalar label."
+
         elif name == "label_validity":
+            col = c.label_column or "label"
             total, good = self.number("SELECT COUNT(label) FROM r"), self.number("SELECT SUM(label_ok) FROM r")
+            bad = total - good
+            rows_res = self.db.execute("SELECT i, label FROM r WHERE label IS NOT NULL AND label_ok=0 ORDER BY i LIMIT 100").fetchall()
+            example_ids = [x[0] for x in rows_res]
+            sample_defects = [{"row_id": i, "column": col, "cause": f"Unrecognized label '{lbl}' (not in approved vocabulary of {len(c.allowed_labels)} classes)"} for i, lbl in rows_res]
+            cause = f"Failed due to {bad} row(s) assigned unrecognized labels outside the allowed vocabulary in column '{col}'." if bad else f"All {total} evaluated labels belong to the allowed vocabulary."
+            details = "Fraction of nonempty scalar labels in the user-supplied allowed label vocabulary."
+
         elif name == "label_consistency":
+            col = c.label_column or "label"
             total = self.number("SELECT COUNT(*) FROM r WHERE h IS NOT NULL AND label IS NOT NULL")
-            bad_sql = "SELECT i FROM r WHERE label IS NOT NULL AND h IN (SELECT h FROM r WHERE h IS NOT NULL AND label IS NOT NULL GROUP BY h HAVING COUNT(DISTINCT label)>1)"
-            bad = self.number("SELECT COUNT(*) FROM ("+bad_sql+")")
-            good = total-bad
-            example_ids = [x[0] for x in self.db.execute(bad_sql+" ORDER BY i LIMIT 10")]
+            bad_sql = "SELECT i, label FROM r WHERE label IS NOT NULL AND h IN (SELECT h FROM r WHERE h IS NOT NULL AND label IS NOT NULL GROUP BY h HAVING COUNT(DISTINCT label)>1)"
+            rows_res = self.db.execute(bad_sql + " ORDER BY i LIMIT 100").fetchall()
+            example_ids = [x[0] for x in rows_res]
+            bad_count_sql = "SELECT COUNT(*) FROM (SELECT i FROM r WHERE label IS NOT NULL AND h IN (SELECT h FROM r WHERE h IS NOT NULL AND label IS NOT NULL GROUP BY h HAVING COUNT(DISTINCT label)>1))"
+            bad = self.number(bad_count_sql)
+            good = total - bad
+            sample_defects = [{"row_id": i, "column": col, "cause": f"Conflicting label '{lbl}' assigned to normalized text with contradictory labels"} for i, lbl in rows_res]
+            cause = f"Failed due to {bad} row(s) assigned conflicting labels for identical text queries in column '{col}'." if bad else "Zero label contradictions detected; identical texts share consistent labels."
             details = "Conflicting labels require review; context-dependent ambiguity is possible."
+
         elif name == "split_completeness":
+            col = c.split_column or "split"
             good = self.number("SELECT SUM(split_ok) FROM r")
+            bad = total - good
+            rows_res = self.db.execute("SELECT i, split FROM r WHERE split_ok=0 ORDER BY i LIMIT 100").fetchall()
+            example_ids = [x[0] for x in rows_res]
+            sample_defects = [{"row_id": i, "column": col, "cause": f"Unrecognized split assignment '{sp}' (expected 'train', 'validation', or 'test')"} for i, sp in rows_res]
+            cause = f"Failed due to {bad} row(s) with missing or unrecognized split assignment in column '{col}'." if bad else f"All {total} evaluated rows belong to recognized splits."
+            details = "Fraction of rows with a recognized train/validation/test split."
+
         elif name in ("split_disjointness", "group_disjointness"):
-            column = "h" if name == "split_disjointness" else "g"
+            is_split = (name == "split_disjointness")
+            col = c.split_column or "split" if is_split else c.group_column or "group"
+            column = "h" if is_split else "g"
             total = self.number(f"SELECT COUNT(*) FROM r WHERE {column} IS NOT NULL AND split IN ('validation','test')")
-            bad_sql = f"SELECT i FROM r WHERE split IN ('validation','test') AND {column} IN (SELECT {column} FROM r WHERE {column} IS NOT NULL AND split_ok=1 GROUP BY {column} HAVING COUNT(DISTINCT split)>1)"
-            good = total-self.number("SELECT COUNT(*) FROM ("+bad_sql+")")
-            example_ids = [x[0] for x in self.db.execute(bad_sql+" ORDER BY i LIMIT 10")]
+            bad_sql = f"SELECT i, split FROM r WHERE split IN ('validation','test') AND {column} IN (SELECT {column} FROM r WHERE {column} IS NOT NULL AND split_ok=1 GROUP BY {column} HAVING COUNT(DISTINCT split)>1)"
+            rows_res = self.db.execute(bad_sql + " ORDER BY i LIMIT 100").fetchall()
+            example_ids = [x[0] for x in rows_res]
+            bad = self.number(f"SELECT COUNT(*) FROM ({bad_sql})")
+            good = total - bad
+            defect_msg = "leaks identical normalized text from training split into test/val split" if is_split else "group identifier crosses multiple splits"
+            sample_defects = [{"row_id": i, "column": col, "cause": f"Evaluation row in split '{sp}' {defect_msg}"} for i, sp in rows_res]
+            cause = f"Failed due to {bad} evaluation row(s) in split '{col}' leaking identical normalized text from the training split (data leakage)." if is_split else f"Failed due to {bad} evaluation row(s) whose group identifier crosses multiple splits in column '{col}'."
+            if not bad:
+                cause = "Zero train/test leakage detected; evaluation splits are mutually disjoint." if is_split else "All group identifiers are strictly isolated to single splits."
             details = "Counts evaluation rows shared across recognized splits; normalization-based overlap, not semantic leakage."
+
         elif name == "group_completeness":
+            col = c.group_column or "group"
             good = self.number("SELECT COUNT(g) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE g IS NULL ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Missing group identifier"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) missing a group identifier in column '{col}'." if bad else f"All {total} rows contain group identifiers."
+            details = "Fraction of rows with a nonempty scalar group identifier."
+
         elif name == "privacy_pattern_clearance":
-            total, good = nonempty, nonempty-self.number("SELECT SUM(private) FROM r")
+            col = c.text_column
+            total, good = nonempty, nonempty - self.number("SELECT SUM(private) FROM r")
+            bad = total - good
+            example_ids = [x[0] for x in self.db.execute("SELECT i FROM r WHERE nonempty=1 AND private=1 ORDER BY i LIMIT 100")]
+            sample_defects = [{"row_id": i, "column": col, "cause": "Contains unredacted email address or telephone candidate pattern"} for i in example_ids]
+            cause = f"Failed due to {bad} row(s) containing unredacted customer emails or phone numbers in column '{col}'." if bad else f"Zero email or phone number candidate patterns detected in column '{col}'."
             details = "Regex candidates only; not a full PII audit or privacy certification."
+
         elif name == "class_support":
+            col = c.label_column or "label"
             where = "label IS NOT NULL AND nonempty=1 AND label_ok=1"
-            if self.config.split_column:
+            if c.split_column:
                 where += " AND split='train'"
-            counts = dict(self.db.execute("SELECT label,COUNT(*) FROM r WHERE "+where+" GROUP BY label"))
-            vocabulary = self.config.allowed_labels or tuple(self.labels)
+            counts = dict(self.db.execute("SELECT label,COUNT(*) FROM r WHERE " + where + " GROUP BY label"))
+            vocabulary = c.allowed_labels or tuple(self.labels)
             if not vocabulary:
-                return {"metric":name,"score":None,"evaluated_rows":0,"reason":"No label vocabulary observed or supplied."}
+                return {
+                    "metric": name, "score": None, "evaluated_rows": 0, "good_rows": 0, "bad_rows": 0,
+                    "affected_column": col, "cause": "No label vocabulary observed or supplied.",
+                    "defect_summary": f"Incomplete check: No label vocabulary observed or supplied in column '{col}'.",
+                    "sample_defects": [], "issue_row_ids": [], "details": "Support adequacy against a provisional target.",
+                    "reason": "No label vocabulary observed or supplied."
+                }
             minimum = min(counts.get(label, 0) for label in vocabulary)
-            return {"metric":name,"score":min(1.0,minimum/parameters["min_class_examples"]),
-                    "evaluated_rows":sum(counts.values()),"minimum_class_examples":minimum,
-                    "target_minimum":parameters["min_class_examples"],"issue_row_ids":[],
-                    "details":"Support adequacy against a provisional target; not semantic label accuracy or representativeness."}
+            target = parameters["min_class_examples"]
+            undersupported = [(lbl, counts.get(lbl, 0)) for lbl in vocabulary if counts.get(lbl, 0) < target]
+            bad = len(undersupported)
+            score = min(1.0, minimum / target)
+            sample_defects = [{"row_id": None, "column": col, "cause": f"Class '{lbl}' has only {cnt} training example(s) (target minimum: {target})"} for lbl, cnt in undersupported[:20]]
+            cause = f"Tail classes under target support in column '{col}': {bad} class(es) have fewer than {target} training examples (lowest: {minimum})." if bad else f"All {len(vocabulary)} classes have at least {target} training examples."
+            defect_summary = f"Class support warning: {bad} class(es) have fewer than {target} training examples in column '{col}' (lowest: {minimum})." if bad else f"Passed: All classes meet target minimum of {target} examples."
+            return {
+                "metric": name, "score": score, "evaluated_rows": sum(counts.values()),
+                "good_rows": len(vocabulary) - bad, "bad_rows": bad,
+                "minimum_class_examples": minimum, "target_minimum": target,
+                "affected_column": col, "cause": cause, "defect_summary": defect_summary,
+                "sample_defects": sample_defects, "issue_row_ids": [],
+                "details": "Support adequacy against a provisional target; not semantic label accuracy or representativeness.",
+                "reason": None
+            }
         else:
-            raise ValueError("Unknown metric: "+name)
-        return {"metric":name,"score":good/total if total else None,"evaluated_rows":total,
-                "good_rows":good,"bad_rows":total-good,"issue_row_ids":example_ids,
-                "details":details,"reason":"No eligible rows." if not total else None}
+            raise ValueError("Unknown metric: " + name)
+
+        if bad > 0:
+            row_preview = ", ".join(str(x) for x in example_ids[:8])
+            if len(example_ids) > 8:
+                row_preview += f" … (+{bad - 8} more)"
+            defect_summary = f"Failed due to {bad} row(s) failing the test in column '{col}' (row numbers: {row_preview})."
+        else:
+            defect_summary = f"Passed: 0 defect rows detected in column '{col}'."
+
+        return {
+            "metric": name,
+            "score": good / total if total else None,
+            "evaluated_rows": total,
+            "good_rows": good,
+            "bad_rows": bad,
+            "affected_column": col,
+            "cause": cause,
+            "defect_summary": defect_summary,
+            "issue_row_ids": example_ids,
+            "sample_defects": sample_defects,
+            "details": details,
+            "reason": "No eligible rows." if not total else None
+        }
 
 
 def numeric(x: Any, low: float, high: float) -> bool:
@@ -377,12 +504,36 @@ def validate_policy(policy: Any, dataset: LocalDataset) -> dict:
     return policy
 
 
+def resolve_metric_column(metric_name: str, config: Config) -> str:
+    if metric_name in ("text_type", "text_completeness", "encoding_cleanliness", "normalized_uniqueness", "length_validity", "privacy_pattern_clearance"):
+        return config.text_column
+    if metric_name in ("label_completeness", "label_validity", "label_consistency", "class_support"):
+        return config.label_column or "label"
+    if metric_name in ("split_completeness", "split_disjointness"):
+        return config.split_column or "split"
+    if metric_name in ("group_completeness", "group_disjointness"):
+        return config.group_column or "group"
+    return config.text_column
+
+
 def evaluate(dataset: LocalDataset, policy: dict, metric_runner=None) -> dict:
     validate_policy(policy,dataset)
     measured, coverage = [], 0.0
     for m in policy["metrics"]:
         result = (metric_runner or dataset.metric)(m["name"],policy["parameters"])
         result.setdefault("executor","local_sqlite")
+        result.setdefault("affected_column", resolve_metric_column(m["name"], dataset.config))
+        result.setdefault("cause", result.get("details", ""))
+        bad_cnt = result.get("bad_rows", 0)
+        result.setdefault(
+            "defect_summary",
+            f"Failed due to {bad_cnt} row(s) failing check '{m['name']}' in column '{result['affected_column']}'."
+            if bad_cnt > 0 else f"Passed: 0 defect rows in column '{result['affected_column']}'."
+        )
+        result.setdefault(
+            "sample_defects",
+            [{"row_id": rid, "column": result["affected_column"], "cause": result["cause"]} for rid in result.get("issue_row_ids", [])]
+        )
         score = result["score"]
         contextual_score = utility(score,m.get("utility"))
         result.update(weight=m["weight"],pass_min=m["pass_min"],gate=m["gate"],rationale=m["rationale"])

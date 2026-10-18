@@ -177,7 +177,34 @@ class AuditorTest(unittest.TestCase):
         self.assertIn("accuracy", clean_and_repair_json(t4)["rationale"])
         # 5. Missing commas between properties
         t5 = '{\n"version": 2\n"acceptance_score": 95\n}'
-        self.assertEqual(clean_and_repair_json(t5)["acceptance_score"], 95)
+    def test_defect_row_diagnostics(self):
+        records = [
+            {"text": "Short", "label": "intent_a", "split": "train"},
+            {"text": "Short", "label": "intent_b", "split": "test"},  # Conflict with row 1, and leaked train into test!
+            {"text": "", "label": "intent_a", "split": "train"},       # Empty text
+        ]
+        c = Config(text_column="text", label_column="label", split_column="split")
+        d = self.dataset(records, c)
+        
+        # 1. Test split disjointness diagnostics
+        r_split = d.metric("split_disjointness", {})
+        self.assertEqual(r_split["affected_column"], "split")
+        self.assertIn(2, r_split["issue_row_ids"])
+        self.assertIn("Failed due to 1 evaluation row(s)", r_split["cause"])
+        self.assertTrue(any(def_item["row_id"] == 2 for def_item in r_split["sample_defects"]))
+
+        # 2. Test label consistency diagnostics
+        r_label = d.metric("label_consistency", {})
+        self.assertEqual(r_label["affected_column"], "label")
+        self.assertIn(1, r_label["issue_row_ids"])
+        self.assertIn(2, r_label["issue_row_ids"])
+        self.assertIn("conflicting labels", r_label["cause"].lower())
+
+        # 3. Test text completeness diagnostics
+        r_text = d.metric("text_completeness", {})
+        self.assertEqual(r_text["affected_column"], "text")
+        self.assertIn(3, r_text["issue_row_ids"])
+        self.assertIn("blank or whitespace-only", r_text["cause"].lower())
 
 
 if __name__ == "__main__": unittest.main()

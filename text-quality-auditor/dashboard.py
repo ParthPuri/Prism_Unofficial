@@ -914,15 +914,24 @@ for m in metrics:
     gate_str = "🔒 Fatal Gate (FAILED)" if is_gate_failed else "🔒 Gated (Must Pass)" if m.get("gate") else "📊 Graded"
     if is_gate_failed:
         score_str = f"{score_str}% (Disqualified)"
+    
+    bad_cnt = m.get("bad_rows", 0)
+    total_eval = m.get("evaluated_rows", 1) or 1
+    pct_bad = f" ({100 * bad_cnt / total_eval:.1f}%)" if bad_cnt > 0 else ""
+    row_ids = m.get("issue_row_ids", [])
+    row_preview = ", ".join(str(x) for x in row_ids[:5]) + ("…" if len(row_ids) > 5 else "") if row_ids else "—"
+
     table_rows.append({
-        "Status":         STATUS_EMOJI.get(m["status"], m["status"]),
-        "Check Name":     display_name,
-        "Score":          score_str,
-        "Pass min":       f"{m['pass_min']*100:.0f}",
-        "Weight":         f"{m['weight']:.3f}",
-        "Gate":           gate_str,
-        "Rows evaluated": m.get("evaluated_rows", "—"),
-        "Defect rows":    m.get("bad_rows", 0),
+        "Status":           STATUS_EMOJI.get(m["status"], m["status"]),
+        "Check Name":       display_name,
+        "Affected Column":  m.get("affected_column", "—"),
+        "Score":            score_str,
+        "Pass min":         f"{m['pass_min']*100:.0f}%",
+        "Weight":           f"{m['weight']:.3f}",
+        "Gate":             gate_str,
+        "Rows evaluated":   m.get("evaluated_rows", "—"),
+        "Defect rows":      f"{bad_cnt}{pct_bad}",
+        "Sample Bad Row IDs": row_preview,
     })
 st.dataframe(table_rows, use_container_width=True, hide_index=True)
 
@@ -932,7 +941,36 @@ failing = [m for m in metrics if m["status"] != "PASS"]
 if failing:
     st.markdown("---")
     st.subheader("🔎 Detailed Findings & Remediation Steps")
-    st.caption("Click on each flagged metric below to understand what happened, why it matters, and how to fix it.")
+    st.caption("Click on each flagged metric below to inspect affected columns, exact row numbers, root causes, and remediation guidance.")
+
+    # Master Corrupted Rows Inspector across all failing checks
+    all_defects = []
+    for fm in failing:
+        for d in fm.get("sample_defects", []):
+            if d.get("row_id") is not None:
+                all_defects.append({
+                    "Row #": d["row_id"],
+                    "Column": d.get("column", fm.get("affected_column", "—")),
+                    "Failed Check": fm["metric"],
+                    "Severity": "🔴 FATAL GATE" if fm.get("gate") else "🟡 WARNING",
+                    "Defect Cause": d["cause"]
+                })
+    if all_defects:
+        with st.expander(f"📑 Master Corrupted Rows Table ({len(all_defects)} total defect rows across all checks)", expanded=True):
+            st.markdown("All corrupted rows across the dataset in one unified view. Filter or download as CSV to fix directly in your pipeline:")
+            st.dataframe(all_defects, use_container_width=True, hide_index=True)
+            master_csv = ["row_id,column,failed_check,severity,defect_cause"]
+            for r_item in all_defects:
+                safe_cause = r_item["Defect Cause"].replace('"', '""')
+                master_csv.append(f"{r_item['Row #']},{r_item['Column']},{r_item['Failed Check']},{r_item['Severity']},\"{safe_cause}\"")
+            st.download_button(
+                label=f"📥 Download All {len(all_defects)} Corrupted Rows Across Dataset (.csv)",
+                data="\n".join(master_csv),
+                file_name="all_corrupted_rows.csv",
+                mime="text/csv",
+                key="dl_master_defects"
+            )
+
     for m in failing:
         score_label = (
             f"score {m['score']*100:.2f}/100" if m["score"] is not None else "not evaluated"
@@ -946,7 +984,50 @@ if failing:
             f"{STATUS_EMOJI.get(m['status'], '?')} {plain_name} (`{m['metric']}`) — {score_label}",
             expanded=is_gate
         ):
-            st.markdown(f"**Severity:** {gate_badge}")
+            # Prominent defect diagnostic banner
+            defect_summary = m.get("defect_summary") or f"Failed check: {m['metric']}"
+            st.error(f"### 🚨 {defect_summary}")
+
+            c_diag1, c_diag2 = st.columns(2)
+            c_diag1.markdown(f"**📌 Affected Column:** `{m.get('affected_column', '—')}`")
+            bad_cnt = m.get("bad_rows", 0)
+            total_eval = m.get("evaluated_rows", 1) or 1
+            c_diag1.markdown(f"**🔢 Total Defect Count:** **{bad_cnt}** rows ({100 * bad_cnt / total_eval:.1f}% defect rate)")
+            c_diag2.markdown(f"**⚖️ Gate Severity:** {gate_badge}")
+            c_diag2.markdown(f"**🎯 Policy Threshold:** `{m['pass_min']*100:.1f}%` (Observed: `{score_label}`)")
+
+            st.markdown(f"**🔍 Root Cause Diagnosis:** {m.get('cause', '—')}")
+
+            # Sample row defects table
+            sample_defects = m.get("sample_defects", [])
+            row_ids = m.get("issue_row_ids", [])
+            if sample_defects and any(d.get("row_id") is not None for d in sample_defects):
+                st.markdown(f"#### 📋 Sample Defect Row Inspector ({len(sample_defects)} sample rows shown)")
+                defect_data = []
+                for d in sample_defects:
+                    if d.get("row_id") is not None:
+                        defect_data.append({
+                            "Row #": d["row_id"],
+                            "Column": d.get("column", m.get("affected_column", "—")),
+                            "Defect Cause": d["cause"]
+                        })
+                if defect_data:
+                    st.dataframe(defect_data, use_container_width=True, hide_index=True)
+                    csv_lines = ["row_id,column,metric,defect_cause"]
+                    for d in defect_data:
+                        safe_cause = d["Defect Cause"].replace('"', '""')
+                        csv_lines.append(f"{d['Row #']},{d['Column']},{m['metric']},\"{safe_cause}\"")
+                    st.download_button(
+                        label=f"📥 Download Defect Rows for {m['metric']} (.csv)",
+                        data="\n".join(csv_lines),
+                        file_name=f"defect_rows_{m['metric']}.csv",
+                        mime="text/csv",
+                        key=f"dl_csv_{m['metric']}"
+                    )
+            elif row_ids:
+                st.markdown(f"**Sample Corrupted Row IDs ({len(row_ids)} shown):** `{', '.join(str(x) for x in row_ids)}`")
+
+            st.markdown("---")
             if info:
                 st.markdown(f"**📖 What this check tests:** {info.get('what_it_means', '')}")
                 st.markdown(f"**💥 Business & Model Impact:** {info.get('why_it_matters', '')}")
@@ -954,16 +1035,8 @@ if failing:
             else:
                 st.write(m.get("details") or m.get("reason") or "No additional details.")
 
-            st.markdown(f"**Policy pass threshold:** `{m['pass_min']*100:.1f}%` (Observed score: `{score_label}`)")
             if m.get("rationale"):
                 st.caption(f"**Context Rationale:** {m['rationale']}")
-
-            ids = m.get("issue_row_ids", [])
-            if ids:
-                st.markdown(
-                    f"**Sample Corrupted Row IDs ({len(ids)} shown):** "
-                    f"`{ids[:50]}`{'…' if len(ids) > 50 else ''}"
-                )
 else:
     st.markdown("---")
     with st.expander("🎉 All checks passed! Learn about what was evaluated", expanded=False):

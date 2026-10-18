@@ -31,7 +31,22 @@ def markdown(report: dict) -> str:
               "## Policy rationale", "", cell(report["policy"]["rationale"]), "",
               "## Findings and local evidence", ""]
     for r in report["metrics"]:
-        lines.append(f"- **{r['metric']}**: {cell(r.get('details') or r.get('reason') or 'Full scan of eligible rows.')} Row IDs: {r.get('issue_row_ids',[])}. {cell(r['rationale'])}")
+        col = r.get("affected_column", "text")
+        status_badge = "FAIL (BLOCKED)" if r.get("gate") and r["status"] != "PASS" else r["status"]
+        summary = r.get("defect_summary") or r.get("cause") or cell(r.get("details") or r.get("reason") or "Full scan of eligible rows.")
+        lines.append(f"### {r['metric']} — {status_badge}")
+        lines.append(f"- **Affected Column:** `{col}`")
+        lines.append(f"- **Diagnosis:** {summary}")
+        if r.get("cause") and r.get("cause") != summary:
+            lines.append(f"- **Root Cause:** {r['cause']}")
+        if r.get("issue_row_ids"):
+            row_preview = ", ".join(str(x) for x in r["issue_row_ids"][:25])
+            if len(r["issue_row_ids"]) > 25:
+                row_preview += f" … (+{len(r['issue_row_ids']) - 25} more)"
+            lines.append(f"- **Corrupted Row IDs ({len(r['issue_row_ids'])} captured):** `{row_preview}`")
+        if r.get("rationale"):
+            lines.append(f"- **Policy Rationale:** {cell(r['rationale'])}")
+        lines.append("")
     lines += ["", "## Limits", ""]+["- "+x for x in report["limits"]]
     lines += ["", "## Reproducibility", "",f"Input SHA-256: `{report['input_sha256']}`",
               f"Policy SHA-256: `{report['policy_sha256']}`",f"Engine: `{report['engine_version']}`",
