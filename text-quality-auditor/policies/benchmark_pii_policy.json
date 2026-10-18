@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "metrics": [
+    {
+      "name": "text_type",
+      "weight": 0.05,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Text values must be valid string data."
+    },
+    {
+      "name": "text_completeness",
+      "weight": 0.10,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Empty strings or whitespace-only texts are prohibited."
+    },
+    {
+      "name": "encoding_cleanliness",
+      "weight": 0.05,
+      "pass_min": 1.0,
+      "gate": false,
+      "rationale": "Non-printable control characters and Unicode replacement chars are flagged."
+    },
+    {
+      "name": "normalized_uniqueness",
+      "weight": 0.05,
+      "pass_min": 0.85,
+      "gate": false,
+      "rationale": "Preserves natural repetition while checking uniqueness."
+    },
+    {
+      "name": "length_validity",
+      "weight": 0.05,
+      "pass_min": 0.99,
+      "gate": false,
+      "rationale": "Enforces minimum 5 characters and maximum 2000 characters."
+    },
+    {
+      "name": "label_completeness",
+      "weight": 0.10,
+      "pass_min": 0.99,
+      "gate": true,
+      "rationale": "Labels must be present for supervised training."
+    },
+    {
+      "name": "label_consistency",
+      "weight": 0.15,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Identical normalized queries must not map to conflicting labels."
+    },
+    {
+      "name": "label_validity",
+      "weight": 0.10,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Labels must belong to the approved intent vocabulary."
+    },
+    {
+      "name": "split_completeness",
+      "weight": 0.05,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Each row must be assigned to train or test."
+    },
+    {
+      "name": "split_disjointness",
+      "weight": 0.15,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Training queries must not leak into evaluation splits."
+    },
+    {
+      "name": "class_support",
+      "weight": 0.05,
+      "pass_min": 1.0,
+      "gate": false,
+      "rationale": "Each intent must have at least 20 training examples."
+    },
+    {
+      "name": "privacy_pattern_clearance",
+      "weight": 0.10,
+      "pass_min": 1.0,
+      "gate": true,
+      "rationale": "Dataset requires strict redaction; PII email and phone patterns are strictly forbidden."
+    }
+  ],
+  "parameters": {
+    "min_chars": 5,
+    "max_chars": 2000,
+    "min_class_examples": 20
+  },
+  "acceptance_score": 90,
+  "rationale": "Synthetic benchmark policy for privacy-enforced redaction requirements."
+}

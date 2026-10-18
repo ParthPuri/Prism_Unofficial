@@ -3,15 +3,35 @@ Text Dataset Quality Auditor — Streamlit Dashboard
 Run: streamlit run dashboard.py
 """
 
+import numpy as np
 import json
 import os
 import subprocess
 import sys
 import tempfile
+import urllib.request
 from pathlib import Path
 
 import plotly.graph_objects as go
 import streamlit as st
+
+
+@st.cache_data(ttl=300, show_spinner=False)
+def get_available_groq_models(api_key: str) -> list[str]:
+    if not api_key or not api_key.strip():
+        return []
+    try:
+        req = urllib.request.Request(
+            "https://api.groq.com/openai/v1/models",
+            headers={"Authorization": f"Bearer {api_key.strip()}", "User-Agent": "textaudit/0.3.0"}
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode())
+            models = [m["id"] for m in data.get("data", []) if m.get("active", True)]
+            chat_models = [m for m in models if not any(x in m.lower() for x in ("whisper", "guard", "safeguard", "orpheus"))]
+            return sorted(chat_models) if chat_models else sorted(models)
+    except Exception:
+        return []
 
 # ── page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -30,6 +50,108 @@ DECISION_COLOR = {
 }
 STATUS_EMOJI = {"PASS": "✅", "FAIL": "❌", "SKIP": "⏭️"}
 
+DECISION_EXPLANATIONS = {
+    "CHECKS_PASSED_REVIEW_REQUIRED": {
+        "title": "Checks Passed (Review Recommended)",
+        "summary": "All mandatory gates and quality thresholds were met. The dataset is structurally sound and ready for model training, pending standard qualitative review.",
+        "action": "Proceed to downstream training or deployment pipeline.",
+        "severity": "success"
+    },
+    "REVIEW_REQUIRED": {
+        "title": "Review Required (Non-Blocking Quality Warnings)",
+        "summary": "Zero fatal blockers were encountered, but soft quality metrics (such as class imbalance, repetitive phrasing, or text length bounds) scored below the acceptance target.",
+        "action": "Review the flagged metrics below. Training can still run, but accuracy or generalization on tail examples may be impacted.",
+        "severity": "warning"
+    },
+    "BLOCKED": {
+        "title": "Dataset Blocked (Fatal Pipeline Defect)",
+        "summary": "One or more hard quality gates failed (e.g. train/test data leakage, conflicting intent labels, unredacted PII, or corrupted text).",
+        "action": "Do not train on this data! Fix the specific row IDs listed in the findings below first.",
+        "severity": "error"
+    },
+    "INCOMPLETE": {
+        "title": "Audit Incomplete",
+        "summary": "Evaluation could not complete full policy coverage due to missing required columns (e.g. missing label column or split column).",
+        "action": "Provide the missing column configurations in the sidebar and rerun the audit.",
+        "severity": "info"
+    }
+}
+
+METRIC_INFO = {
+    "split_disjointness": {
+        "plain_name": "Train/Test Data Leakage",
+        "what_it_means": "Checks whether customer queries from the training split accidentally appear inside the validation or test splits.",
+        "why_it_matters": "If test queries exist in training data, the model will 'cheat' by memorizing answers, producing falsely inflated test accuracy that collapses in production.",
+        "how_to_fix": "Remove or deduplicate the leaked queries from either the training or evaluation split."
+    },
+    "label_consistency": {
+        "plain_name": "Contradictory Intent Labels",
+        "what_it_means": "Checks if the exact same customer query was tagged with two or more conflicting intent classes.",
+        "why_it_matters": "Conflicting labels give contradictory learning signals to the neural network, degrading model convergence and confidence.",
+        "how_to_fix": "Inspect the affected row IDs, determine the single correct intent label, and harmonize annotations."
+    },
+    "privacy_pattern_clearance": {
+        "plain_name": "Unredacted PII (Emails & Phones)",
+        "what_it_means": "Scans customer messages for personal identifiable information candidate patterns (email addresses, telephone numbers).",
+        "why_it_matters": "Training language models on raw customer PII risks memorization, data extraction attacks, and severe GDPR/privacy violations.",
+        "how_to_fix": "Run an automated regex or NER anonymization script to replace emails and phones with <EMAIL> and <PHONE> tokens."
+    },
+    "encoding_cleanliness": {
+        "plain_name": "Corrupted UTF-8 & Encoding Artifacts",
+        "what_it_means": "Detects Unicode replacement characters (e.g.  / U+FFFD), broken mojibake, and control character anomalies.",
+        "why_it_matters": "Broken characters distort tokenization, generating fragmented subwords and corrupting vector embeddings.",
+        "how_to_fix": "Re-export data using standard UTF-8 encoding or clean inputs with `ftfy` (fixes text for you)."
+    },
+    "text_completeness": {
+        "plain_name": "Blank or Missing Texts",
+        "what_it_means": "Verifies that every row contains actual readable text after stripping empty whitespace.",
+        "why_it_matters": "Null or whitespace-only inputs cause loss computation crashes and waste model capacity on blank inputs.",
+        "how_to_fix": "Drop blank rows or impute missing text entries before model ingestion."
+    },
+    "label_validity": {
+        "plain_name": "Unrecognized / Hallucinated Labels",
+        "what_it_means": "Validates that every row's label matches the approved project taxonomy or label vocabulary.",
+        "why_it_matters": "Typos in labels create phantom classes, shifting softmax probabilities and breaking evaluation metrics.",
+        "how_to_fix": "Correct spelling errors or remap outlier labels to approved classes."
+    },
+    "length_validity": {
+        "plain_name": "Character Length Bounds",
+        "what_it_means": "Checks whether query lengths stay within reasonable bounds (e.g. between 1 and 10,000 characters).",
+        "why_it_matters": "Single-character queries convey no semantic meaning, while 2,000+ character spam dumps trigger GPU out-of-memory errors.",
+        "how_to_fix": "Filter out spam dumps and single-character accidental clicks."
+    },
+    "normalized_uniqueness": {
+        "plain_name": "Duplicate Query Redundancy",
+        "what_it_means": "Measures the ratio of unique customer questions versus boilerplate repetitive phrases.",
+        "why_it_matters": "Heavy repetition biases the model to over-focus on frequent questions at the expense of rare intents.",
+        "how_to_fix": "Apply smart deduplication or sample balancing if diversity is required."
+    },
+    "class_support": {
+        "plain_name": "Minimum Per-Class Sample Support",
+        "what_it_means": "Measures whether tail classes meet the minimum target sample size (e.g. 20 examples per class).",
+        "why_it_matters": "Classes with very few training examples suffer from high error rates and poor few-shot generalization.",
+        "how_to_fix": "Collect additional training data or use data augmentation for under-represented classes."
+    },
+    "label_completeness": {
+        "plain_name": "Missing Labels",
+        "what_it_means": "Ensures every training row has an associated target label assigned.",
+        "why_it_matters": "Supervised training algorithms cannot compute gradient updates on unlabeled examples.",
+        "how_to_fix": "Label the missing rows or exclude them from the supervised training split."
+    },
+    "split_completeness": {
+        "plain_name": "Split Assignment",
+        "what_it_means": "Ensures every row is explicitly assigned to a recognized split (train, validation, or test).",
+        "why_it_matters": "Unassigned rows are discarded or cause accidental data leakage during random partitioning.",
+        "how_to_fix": "Assign missing rows explicitly to train, validation, or test."
+    },
+    "text_type": {
+        "plain_name": "Valid String Data Type",
+        "what_it_means": "Verifies that all values in the text column are string objects rather than raw numbers or nulls.",
+        "why_it_matters": "Non-string data types cause fatal crashes in text tokenizers and NLP pipelines.",
+        "how_to_fix": "Cast all text column entries to strings during ingestion."
+    }
+}
+
 EXAMPLE_CONTEXTS = {
     "BANKING77 — intent classifier": (
         "Train a 77-intent banking customer-support classifier. "
@@ -43,7 +165,184 @@ EXAMPLE_CONTEXTS = {
         "Phone numbers can appear legitimately in ham messages. "
         "Flag encoding anomalies for review. Missing labels are unacceptable."
     ),
+    "Benchmark 0: Clean Baseline": (
+        "Train a 10-intent banking support classifier. "
+        "All data rows are clean; expect 100% Quality Index and zero blockers."
+    ),
+    "Benchmark 1: Split Leakage": (
+        "Train an intent classifier with independent train and test evaluation splits. "
+        "Prioritise split independence. Training queries leaking into test split are unacceptable."
+    ),
+    "Benchmark 2: Label Contradictions": (
+        "Train an intent classifier. "
+        "Prioritise label consistency. Conflicting labels on identical queries are unacceptable."
+    ),
+    "Benchmark 3: Encoding Errors": (
+        "Train an intent classifier. "
+        "Flag encoding anomalies, Unicode replacement characters, and control codes for review."
+    ),
+    "Benchmark 4: PII Leakage": (
+        "Train an intent classifier from customer chats. "
+        "Require complete redaction of customer contact details and personal emails/phone numbers."
+    ),
+    "Benchmark 5: Empty Texts": (
+        "Train an intent classifier. "
+        "Text completeness is mandatory. Empty or whitespace-only queries are unacceptable."
+    ),
+    "Benchmark 6: Invalid Labels": (
+        "Train an intent classifier with approved vocabulary. "
+        "Labels outside the allowed vocabulary classes are unacceptable."
+    ),
+    "Benchmark 7: Length Anomalies": (
+        "Train an intent classifier. "
+        "Flag extreme length anomalies (single character queries or 2000+ char text) for review."
+    ),
+    "Benchmark 8: High Redundancy": (
+        "Train an intent classifier. Many customer questions use common repetitive phrasing; "
+        "measure uniqueness rate without blocking the pipeline."
+    ),
+    "Benchmark 9: Class Imbalance": (
+        "Train an intent classifier. Tail intents have limited training examples; "
+        "highlight class support for review without blocking."
+    ),
+    "Benchmark 10: Realistic Noise": (
+        "Production banking support classifier. Data contains natural repetitions, "
+        "tail classes and minor formatting quirks; evaluate overall fitness for human review."
+    ),
     "Custom (type your own)": "",
+}
+
+DATASET_PRESETS = {
+    "BANKING77 (Full real-world dataset)": {
+        "path": WORKSPACE / "data" / "banking77" / "dataset.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "banking77" / "labels.json",
+        "context_preset": "BANKING77 — intent classifier",
+        "policy": WORKSPACE / "policies" / "classification_demo.json",
+        "require_redacted": False,
+        "desc": "Real-world customer support intent dataset (13,083 rows across 77 intents: 10,003 train, 3,080 test).",
+    },
+    "SMS Spam (Full binary classifier)": {
+        "path": WORKSPACE / "data" / "sms_spam" / "dataset.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "sms_spam" / "labels.json",
+        "context_preset": "SMS Spam — binary classifier",
+        "policy": WORKSPACE / "policies" / "classification_demo.json",
+        "require_redacted": False,
+        "desc": "SMS Spam vs Ham binary classification dataset (5,574 messages).",
+    },
+    "Benchmark 0: Clean Baseline (100% Quality Index)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_clean_baseline.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 0: Clean Baseline",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "Control baseline (1,000 clean rows, 10 balanced classes). Expected score: 100/100, All PASS.",
+    },
+    "Benchmark 1: Split Leakage (Train in test split)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_split_leakage.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 1: Split Leakage",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "25 training queries copied into test split. Expected outcome: BLOCKED by split_disjointness gate.",
+    },
+    "Benchmark 2: Label Contradictions (Conflicting intents)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_label_conflict.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 2: Label Contradictions",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "20 identical queries assigned contradictory intent labels. Expected outcome: BLOCKED by label_consistency gate.",
+    },
+    "Benchmark 3: Encoding Errors (Corrupt UTF-8 & controls)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_encoding_errors.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 3: Encoding Errors",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "20 queries with Unicode replacement chars and control codes. Expected outcome: BLOCKED by encoding_cleanliness.",
+    },
+    "Benchmark 4: PII Leakage (Unredacted email & phone)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_pii_leakage.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 4: PII Leakage",
+        "policy": WORKSPACE / "policies" / "benchmark_pii_policy.json",
+        "require_redacted": True,
+        "desc": "20 queries containing customer emails and phone numbers. Expected outcome: BLOCKED by privacy gate.",
+    },
+    "Benchmark 5: Empty Texts (Blank / null queries)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_empty_texts.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 5: Empty Texts",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "15 blank, whitespace-only, or missing queries. Expected outcome: BLOCKED by text_completeness gate.",
+    },
+    "Benchmark 6: Invalid Labels (Hallucinated classes)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_invalid_labels.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 6: Invalid Labels",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "20 queries assigned unrecognized labels outside the 10 approved banking classes. Expected outcome: BLOCKED by label_validity gate.",
+    },
+    "Benchmark 7: Length Anomalies (Extreme query lengths)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_length_anomalies.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 7: Length Anomalies",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "15 single-character queries and 2,500-character spam texts violating length bounds. Expected outcome: BLOCKED by length_validity.",
+    },
+    "Benchmark 8: High Redundancy (Graded ~95 QI, Unblocked)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_high_redundancy.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 8: High Redundancy",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "Graded Benchmark: 55% repeated boilerplate queries. Evaluates continuous scoring (~95/100, zero blockers).",
+    },
+    "Benchmark 9: Class Imbalance (Graded ~97 QI, Unblocked)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_class_imbalance.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 9: Class Imbalance",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "Graded Benchmark: Tail classes have only 8 rows. Evaluates class support penalty (~97/100, zero blockers).",
+    },
+    "Benchmark 10: Realistic Noise (Graded ~94 QI, Unblocked)": {
+        "path": WORKSPACE / "data" / "benchmarks" / "benchmark_realistic_noise.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Benchmark 10: Realistic Noise",
+        "policy": WORKSPACE / "policies" / "benchmark_policy.json",
+        "require_redacted": False,
+        "desc": "Graded Benchmark: Production-like mix of repetitions, tail classes, and quirks (~94/100, zero blockers).",
+    },
 }
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -132,6 +431,10 @@ def run_audit(
     hf_token: str | None,
     hf_model: str | None,
     ollama_model: str | None,
+    groq_api_key: str | None = None,
+    groq_model: str | None = None,
+    policy_path: Path | None = None,
+    require_redacted: bool = False,
 ) -> dict:
     """Call textaudit CLI; returns the parsed report dict."""
     cmd = [
@@ -144,12 +447,20 @@ def run_audit(
         cmd += ["--split-column", split_col.strip()]
     if allowed_labels_path:
         cmd += ["--allowed-labels", str(allowed_labels_path)]
+    if require_redacted:
+        cmd += ["--require-redacted"]
 
     env = os.environ.copy()
 
     if use_case and use_case.strip():
         cmd += ["--use-case", use_case.strip()]
-        if provider_choice == "Local Ollama (free)":
+        if provider_choice == "Groq (recommended & fast)":
+            cmd += ["--provider", "groq", "--allow-remote"]
+            if groq_model and groq_model.strip():
+                cmd += ["--model", groq_model.strip()]
+            if groq_api_key and groq_api_key.strip():
+                env["GROQ_API_KEY"] = groq_api_key.strip()
+        elif provider_choice == "Local Ollama (free)":
             cmd += [
                 "--provider", "local",
                 "--model", ollama_model.strip(),
@@ -163,8 +474,9 @@ def run_audit(
             if hf_token:
                 env["HF_TOKEN"] = hf_token
     else:
-        # Demo policy — no model needed
-        cmd += ["--policy", str(WORKSPACE / "policies" / "classification_demo.json")]
+        # Reference policy — no model needed
+        p = policy_path or (WORKSPACE / "policies" / "classification_demo.json")
+        cmd += ["--policy", str(p)]
 
     result = subprocess.run(cmd, capture_output=True, text=True,
                             cwd=str(WORKSPACE), env=env)
@@ -189,20 +501,17 @@ with st.sidebar:
                             label_visibility="collapsed")
 
     if dataset_mode == "Use a bundled example":
-        example = st.selectbox("Example", ["BANKING77", "SMS Spam"])
-        if example == "BANKING77":
-            _dataset_path       = WORKSPACE / "data" / "banking77" / "dataset.csv"
-            _label_col_default  = "label"
-            _split_col_default  = "split"
-            _labels_path        = WORKSPACE / "data" / "banking77" / "labels.json"
-            _context_preset     = "BANKING77 — intent classifier"
-        else:
-            _dataset_path       = WORKSPACE / "data" / "sms_spam" / "dataset.csv"
-            _label_col_default  = "label"
-            _split_col_default  = "split"
-            _labels_path        = WORKSPACE / "data" / "sms_spam" / "labels.json"
-            _context_preset     = "SMS Spam — binary classifier"
-        uploaded_file = None
+        example = st.selectbox("Choose dataset or benchmark", list(DATASET_PRESETS.keys()))
+        spec = DATASET_PRESETS[example]
+        _dataset_path       = spec["path"]
+        _label_col_default  = spec["label"]
+        _split_col_default  = spec["split"]
+        _labels_path        = spec["labels_path"]
+        _context_preset     = spec["context_preset"]
+        _policy_path        = spec["policy"]
+        _require_redacted   = spec["require_redacted"]
+        uploaded_file       = None
+        st.caption(f"💡 {spec['desc']}")
     else:
         uploaded_file       = st.file_uploader("CSV file", type=["csv"])
         _dataset_path       = None
@@ -210,6 +519,8 @@ with st.sidebar:
         _split_col_default  = "split"
         _labels_path        = None
         _context_preset     = "Custom (type your own)"
+        _policy_path        = None
+        _require_redacted   = False
 
     label_col = st.text_input("Label column", value=_label_col_default)
     split_col = st.text_input("Split column (optional)", value=_split_col_default)
@@ -253,14 +564,44 @@ with st.sidebar:
 
         provider_choice = st.selectbox(
             "Inference provider",
-            ["Hugging Face (paid)", "Local Ollama (free)"],
+            ["Groq (recommended & fast)", "Local Ollama (free)", "Hugging Face (paid)"],
             help=(
-                "Hugging Face requires a paid inference token. "
-                "Ollama is free and runs locally — install from ollama.com and pull a model first."
+                "Groq is ultra-fast with generous free tier (console.groq.com). "
+                "Ollama is free and runs locally offline. "
+                "Hugging Face requires paid inference credits."
             ),
         )
 
-        if provider_choice == "Hugging Face (paid)":
+        if provider_choice == "Groq (recommended & fast)":
+            groq_api_key = st.text_input(
+                "Groq API key (GROQ_API_KEY)",
+                value=os.getenv("GROQ_API_KEY", ""),
+                type="password",
+                help="Create for free at console.groq.com/keys.",
+            )
+            live_models = get_available_groq_models(groq_api_key)
+            if live_models:
+                prioritized = [m for m in ("openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b") if m in live_models]
+                rest = [m for m in live_models if m not in prioritized]
+                options = prioritized + rest + ["Custom (type your own)"]
+            else:
+                options = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b", "Custom (type your own)"]
+
+            groq_model_choice = st.selectbox(
+                "Model",
+                options,
+                index=0,
+                help="Models available on your Groq account. openai/gpt-oss-20b is recommended.",
+            )
+            st.caption("⚡ **openai/gpt-oss-20b** is the lightest, fastest instruction model on Groq (no thinking token overhead).")
+            if groq_model_choice == "Custom (type your own)":
+                groq_model = st.text_input("Enter Groq Model ID", value="openai/gpt-oss-20b")
+            else:
+                groq_model = groq_model_choice
+            hf_token = None
+            hf_model = None
+            ollama_model = None
+        elif provider_choice == "Hugging Face (paid)":
             hf_token = st.text_input(
                 "Hugging Face token (HF_TOKEN)",
                 type="password",
@@ -268,10 +609,12 @@ with st.sidebar:
             )
             hf_model = st.text_input(
                 "Model (optional)",
-                value="Qwen/Qwen3-235B-A22B-Instruct-2507:nscale",
+                value="Qwen/Qwen3-235B-A22B-Instruct-2507",
                 help="Default is the project's configured model. Change only if you know another model supports structured JSON output.",
             )
             ollama_model = None
+            groq_api_key = None
+            groq_model = None
         else:
             st.caption("Make sure Ollama is running: `ollama serve` and the model is pulled.")
             ollama_model = st.text_input(
@@ -281,11 +624,15 @@ with st.sidebar:
             )
             hf_token = None
             hf_model = None
+            groq_api_key = None
+            groq_model = None
     else:
         st.caption("No context → demo policy used (works offline, no model needed).")
         hf_token = None
         hf_model = None
         ollama_model = None
+        groq_api_key = None
+        groq_model = None
         provider_choice = None
 
     st.divider()
@@ -329,10 +676,17 @@ if dataset_mode == "Upload my own CSV" and uploaded_file is None:
     st.error("Please upload a CSV file before running the audit.")
     st.stop()
 
+if use_ai and provider_choice == "Groq (recommended & fast)" and not (groq_api_key and groq_api_key.strip()):
+    st.error(
+        "You selected Groq but didn't enter an API key. "
+        "Add your GROQ_API_KEY (from console.groq.com/keys), switch to Local Ollama, or clear the business context to use the demo policy."
+    )
+    st.stop()
+
 if use_ai and provider_choice == "Hugging Face (paid)" and not hf_token:
     st.error(
         "You selected Hugging Face but didn't enter a token. "
-        "Add your HF_TOKEN, switch to Local Ollama, or clear the business context to use the demo policy."
+        "Add your HF_TOKEN, switch to Groq or Local Ollama, or clear the business context to use the demo policy."
     )
     st.stop()
 
@@ -366,6 +720,10 @@ with st.spinner("Running audit…"):
                 hf_token=hf_token,
                 hf_model=hf_model,
                 ollama_model=ollama_model,
+                groq_api_key=groq_api_key,
+                groq_model=groq_model,
+                policy_path=_policy_path,
+                require_redacted=_require_redacted,
             )
     except Exception as exc:
         st.error(f"Audit failed: {exc}")
@@ -386,7 +744,12 @@ st.markdown("---")
 gauge_col, decision_col, profile_col = st.columns([2, 2, 3])
 
 with gauge_col:
-    st.plotly_chart(gauge_chart(qi), use_container_width=True)
+    try:
+        st.plotly_chart(gauge_chart(qi), use_container_width=True)
+    except Exception:
+        v = qi if qi is not None else 0
+        st.metric("Quality Index", f"{v:.1f}/100")
+        st.progress(min(1.0, max(0.0, float(v) / 100.0)))
 
 with decision_col:
     st.markdown("### Decision")
@@ -411,12 +774,32 @@ with profile_col:
 
 # ── blocker / status banner ───────────────────────────────────────────────────
 
+dec_info = DECISION_EXPLANATIONS.get(decision, {
+    "title": decision.replace("_", " "),
+    "summary": "Audit evaluation completed.",
+    "action": "Inspect metric results below.",
+    "severity": "info"
+})
+
 if blockers:
-    st.error(f"🚫 **Blocked by:** {', '.join(blockers)}")
+    st.error(
+        f"### 🚫 {dec_info['title']}\n\n"
+        f"**Why:** {dec_info['summary']}\n\n"
+        f"**Fatal Blockers Triggered:** `{', '.join(blockers)}`\n\n"
+        f"👉 **Action Required:** {dec_info['action']}"
+    )
 elif decision == "REVIEW_REQUIRED":
-    st.warning("⚠️ All gates passed — some checks need human review.")
+    st.warning(
+        f"### ⚠️ {dec_info['title']}\n\n"
+        f"**Why:** {dec_info['summary']}\n\n"
+        f"👉 **Action Required:** {dec_info['action']}"
+    )
 else:
-    st.success("✅ All configured checks passed. Human review still required before production.")
+    st.success(
+        f"### ✅ {dec_info['title']}\n\n"
+        f"**Why:** {dec_info['summary']}\n\n"
+        f"👉 **Next Step:** {dec_info['action']}"
+    )
 
 # ── context card (AI policy only) ─────────────────────────────────────────────
 
@@ -441,12 +824,18 @@ bar_col, pie_col = st.columns([3, 2])
 
 with bar_col:
     st.subheader("Per-metric scores vs. thresholds")
-    st.plotly_chart(metric_bar_chart(metrics), use_container_width=True)
+    try:
+        st.plotly_chart(metric_bar_chart(metrics), use_container_width=True)
+    except Exception:
+        st.info("Chart view unavailable; see Metric Details table below.")
 
 with pie_col:
     st.subheader("Weight distribution")
     st.caption("Green = PASS · Red = FAIL")
-    st.plotly_chart(weight_pie(metrics), use_container_width=True)
+    try:
+        st.plotly_chart(weight_pie(metrics), use_container_width=True)
+    except Exception:
+        pass
 
 st.markdown("---")
 
@@ -456,15 +845,17 @@ st.subheader("Metric details")
 table_rows = []
 for m in metrics:
     score_str = f"{m['score']*100:.2f}" if m["score"] is not None else "—"
+    info = METRIC_INFO.get(m["metric"], {})
+    display_name = f"{m['metric']} ({info.get('plain_name', '')})" if info.get("plain_name") else m["metric"]
     table_rows.append({
         "Status":         STATUS_EMOJI.get(m["status"], m["status"]),
-        "Metric":         m["metric"],
+        "Check Name":     display_name,
         "Score":          score_str,
         "Pass min":       f"{m['pass_min']*100:.0f}",
         "Weight":         f"{m['weight']:.3f}",
-        "Gate":           "🔒" if m.get("gate") else "—",
+        "Gate":           "🔒 Gated (Must Pass)" if m.get("gate") else "📊 Graded",
         "Rows evaluated": m.get("evaluated_rows", "—"),
-        "Bad rows":       m.get("bad_rows", 0),
+        "Defect rows":    m.get("bad_rows", 0),
     })
 st.dataframe(table_rows, use_container_width=True, hide_index=True)
 
@@ -473,22 +864,47 @@ st.dataframe(table_rows, use_container_width=True, hide_index=True)
 failing = [m for m in metrics if m["status"] != "PASS"]
 if failing:
     st.markdown("---")
-    st.subheader("🔎 Findings requiring attention")
+    st.subheader("🔎 Detailed Findings & Remediation Steps")
+    st.caption("Click on each flagged metric below to understand what happened, why it matters, and how to fix it.")
     for m in failing:
         score_label = (
             f"score {m['score']*100:.2f}/100" if m["score"] is not None else "not evaluated"
         )
+        is_gate = m.get("gate", False)
+        gate_badge = "🔴 **CRITICAL BLOCKER (GATE)**" if is_gate else "🟡 **QUALITY WARNING (GRADED)**"
+        info = METRIC_INFO.get(m["metric"], {})
+        plain_name = info.get("plain_name", m["metric"].replace("_", " ").title())
+
         with st.expander(
-            f"{STATUS_EMOJI.get(m['status'], '?')} **{m['metric']}** — {score_label}"
+            f"{STATUS_EMOJI.get(m['status'], '?')} {plain_name} (`{m['metric']}`) — {score_label}",
+            expanded=is_gate
         ):
-            st.write(m.get("details") or m.get("reason") or "No additional details.")
+            st.markdown(f"**Severity:** {gate_badge}")
+            if info:
+                st.markdown(f"**📖 What this check tests:** {info.get('what_it_means', '')}")
+                st.markdown(f"**💥 Business & Model Impact:** {info.get('why_it_matters', '')}")
+                st.markdown(f"**🛠️ How to fix:** {info.get('how_to_fix', '')}")
+            else:
+                st.write(m.get("details") or m.get("reason") or "No additional details.")
+
+            st.markdown(f"**Policy pass threshold:** `{m['pass_min']*100:.1f}%` (Observed score: `{score_label}`)")
+            if m.get("rationale"):
+                st.caption(f"**Context Rationale:** {m['rationale']}")
+
             ids = m.get("issue_row_ids", [])
             if ids:
-                st.write(
-                    f"**Affected row IDs ({len(ids)}):** "
-                    f"{ids[:50]}{'…' if len(ids) > 50 else ''}"
+                st.markdown(
+                    f"**Sample Corrupted Row IDs ({len(ids)} shown):** "
+                    f"`{ids[:50]}`{'…' if len(ids) > 50 else ''}"
                 )
-            st.caption(m.get("rationale", ""))
+else:
+    st.markdown("---")
+    with st.expander("🎉 All checks passed! Learn about what was evaluated", expanded=False):
+        st.markdown("Every configured metric satisfied its required thresholds:")
+        for m in metrics:
+            info = METRIC_INFO.get(m["metric"], {})
+            p_name = info.get("plain_name", m["metric"])
+            st.markdown(f"- ✅ **{p_name}** (`{m['metric']}`): {m['score']*100:.1f}% score (Min required: {m['pass_min']*100:.1f}%)")
 
 # ── policy rationale ──────────────────────────────────────────────────────────
 

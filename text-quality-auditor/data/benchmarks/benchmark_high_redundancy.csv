@@ -1,0 +1,1001 @@
+text,label,split
+I am still waiting on my card?,card_arrival,train
+What can I do if my card still hasn't arrived after 2 weeks?,card_arrival,train
+I have been waiting over a week. Is the card still coming?,card_arrival,train
+Can I track my card while it is in the process of delivery?,card_arrival,train
+"How do I know if I will get my card, or if it is lost?",card_arrival,train
+When did you send me my new card?,card_arrival,train
+Do you have info about the card on delivery?,card_arrival,train
+What do I do if I still have not received my new card?,card_arrival,train
+Does the package with my card have tracking?,card_arrival,train
+I ordered my card but it still isn't here,card_arrival,train
+Why has my new card still not come?,card_arrival,train
+"I still haven't received my card after two weeks, is it lost?",card_arrival,train
+Can you track my card for me?,card_arrival,train
+Is there a way to track the delivery of my card?,card_arrival,train
+It's been a week since I ordered my card and it's not here. Please help?,card_arrival,train
+Will I be able to track the card that was sent to me?,card_arrival,train
+I don't have my card in 1 week.  Should I be worried?,card_arrival,train
+How do I know when my new card is going to arrive?,card_arrival,train
+My new card has not been delivered to my home yet. What is going on?,card_arrival,train
+It's been a week since you issued me a card and I still didn't get it. Should I keep waiting?,card_arrival,train
+"On the card that is coming, what's the tracking info?",card_arrival,train
+What is the status of my card's delivery?,card_arrival,train
+Have you sent out my card yet?,card_arrival,train
+My card isn't here yet.,card_arrival,train
+where is my new card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+I am still waiting on my card?,card_arrival,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+I was able to find my card. How to I go about putting it into my app?,card_linking,train
+how do I get my card to show in the app?,card_linking,train
+I just got my card.  It's not linked yet--how do I do that?,card_linking,train
+"lost card found, want to put it back in app",card_linking,train
+"I just got a card, how can I add it to the app?",card_linking,train
+Is there any way to see my card in the app?,card_linking,train
+If I find a card I lost do I need to dispose of it? Or can I re-active the card and continue to use it?,card_linking,train
+I found my card. How can I put it into my app?,card_linking,train
+How do I make my card show up in the app?,card_linking,train
+Can you show me where to link the new card?,card_linking,train
+I found my old card. Can I link it back into the app?,card_linking,train
+"Show me how to link the new card,",card_linking,train
+How do I add an existing card to the app?,card_linking,train
+I finally got my card.  Now I want to link it.  Is that something you have to do or can I do that?,card_linking,train
+How do I link one of your card that I already have?,card_linking,train
+If I have a physical card can I link it?,card_linking,train
+I found my lost card in my jacket pocket this morning so I'd like to reactivate it please.,card_linking,train
+Can I add a card that I just found (again) to the app?,card_linking,train
+How can I make my card show up in the app?,card_linking,train
+"I would like to re-activate my card, it was previously reported  lost but I found it this morning.",card_linking,train
+"Okay, I found my card, can I put it back in the app?",card_linking,train
+Can I reactivate a card?,card_linking,train
+I would like to reactivate a card and wondered if that could be done?,card_linking,train
+"I got my card now, how do I make it show up in the app?",card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+My card has been found. Is there any way for me to put it back into the app?,card_linking,train
+What is my money worth in other countries?,exchange_rate,train
+Will my money be of equal value when I travel abroad?,exchange_rate,train
+Do you know the rate of exchange?,exchange_rate,train
+What foreign exchange rate will I get on weekdays and on the weekends?,exchange_rate,train
+What is the exchange looking like?,exchange_rate,train
+How is the exchange rate doing?,exchange_rate,train
+I would like to know how exchange rates are calculated when transferring funds.,exchange_rate,train
+I would like to know what exchange rates you use?,exchange_rate,train
+"If I need to cash foreign transfers, how does that work?",exchange_rate,train
+Do you know what your exchange rates are?,exchange_rate,train
+How do I know what exchange rate I will get?,exchange_rate,train
+What are you exchange rates?,exchange_rate,train
+Do you have the best exchange rate?,exchange_rate,train
+Where can I find your exchange rates?,exchange_rate,train
+Your exchange rates come from where?,exchange_rate,train
+I need to know what your exchange rates are.,exchange_rate,train
+What's the process for exchanges?,exchange_rate,train
+What do you think of the exchange rate?,exchange_rate,train
+How are exchange rates calculated at this bank?,exchange_rate,train
+What do you use to figure out the exchange rate for the card?,exchange_rate,train
+What's the foreign exchange rate I will receive?,exchange_rate,train
+I need to know what foreign exchange rate I can get.,exchange_rate,train
+What are the current exchange rates?,exchange_rate,train
+What exchange rate will I receive?,exchange_rate,train
+What is the basis of your exchange rates?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+What is my money worth in other countries?,exchange_rate,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+I received a fee I should not have.,card_payment_fee_charged,train
+Why am I being a charged for using my card?,card_payment_fee_charged,train
+Tell me why there is a fee for a card payment.,card_payment_fee_charged,train
+I don't understand why I'm being charged for using my card.,card_payment_fee_charged,train
+I paid with my card so so why was I charged a transaction fee?,card_payment_fee_charged,train
+"I shouldn't have been charged but I see a fee, why?",card_payment_fee_charged,train
+"i made a payment with my card and was charged a fee, why would you do that",card_payment_fee_charged,train
+A fee came along with me paying with card,card_payment_fee_charged,train
+I had to pay a fee when buying items with my card.,card_payment_fee_charged,train
+Why is there a fee when I thought there would be no fees?,card_payment_fee_charged,train
+Why are there fees for using a card?,card_payment_fee_charged,train
+I had to pay money for paying with my card.,card_payment_fee_charged,train
+"I'm going on holiday to France for 6 weeks with my family and the cat, Fluffy.  I just purchased €10,000 from a currency exchange to ensure we don't run short but there appears to be a fee.  What is this for?",card_payment_fee_charged,train
+What are the reasons to be charged a fee on card payments?,card_payment_fee_charged,train
+I paid with card and was charged a fee that shouldn't be there!,card_payment_fee_charged,train
+Why was I charged an extra fee when paying with card?,card_payment_fee_charged,train
+I noticed a new fee on my account. I didn't know there were fees for these payments. What is the policy?,card_payment_fee_charged,train
+I don't understand why I was charged an additional fee for this service. Can you clarify?,card_payment_fee_charged,train
+Why is there a fee for using my card?,card_payment_fee_charged,train
+Why was my transaction charged an extra fee when paying with my card?,card_payment_fee_charged,train
+"Where can I find out the fee structure for my account? I have been charged fees for some transactions, but not for other ones. I can't find a pattern in these fees.",card_payment_fee_charged,train
+"On a card payment, why is there a fee?",card_payment_fee_charged,train
+Why did I get charged a fee for my card payment?,card_payment_fee_charged,train
+Why are you charging me fees for using my card?,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+There was a fee charged when I paid with my card.,card_payment_fee_charged,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why did they charge me an extra $1?,extra_charge_on_statement,train
+Why is there a 1 euro fee on my statement?,extra_charge_on_statement,train
+Why do I see an extra £1 charge on my statement?,extra_charge_on_statement,train
+I am inquiring about a $1 charge on my statement.,extra_charge_on_statement,train
+What is the $1 transaction on my account?,extra_charge_on_statement,train
+What is this extra pound charge for?,extra_charge_on_statement,train
+I was charged $1 in a transaction.,extra_charge_on_statement,train
+What is the reason for the extra fee on my statement?,extra_charge_on_statement,train
+There is a pending 1£ charge on my statement.  I haven't purchased anything for 1£.  Why is it on my statement?,extra_charge_on_statement,train
+Have have a small charge on my account from someone I purchased with but I'm not sure what it relates to.,extra_charge_on_statement,train
+"I have a strange transaction for £1 on my statement, what is that?",extra_charge_on_statement,train
+I have no idea why there is a dollar that has been charged to my account.,extra_charge_on_statement,train
+I have been charged a pound for something that appears on my statement,extra_charge_on_statement,train
+Why is there a $1 charge on my statement?,extra_charge_on_statement,train
+Where did this extra €1 fee on my statement come from?,extra_charge_on_statement,train
+Is there a reason why there is an extra £1 charge on my account?,extra_charge_on_statement,train
+Can you tell me what this fee is on my statement?,extra_charge_on_statement,train
+Why has another fee been placed on my statement?,extra_charge_on_statement,train
+There has been a charge pending on my account statement that I can't figue out it's for a dollar.,extra_charge_on_statement,train
+€1 was in my statement as an extra fee.,extra_charge_on_statement,train
+Why is there an extra charge on my statement.,extra_charge_on_statement,train
+"Hey, I got charged extra for some reason when I purchased an app. Is this a hidden fee or something? I don't think it's very cool.",extra_charge_on_statement,train
+I see a $1 charge in a transaction.,extra_charge_on_statement,train
+I had to pay a pound more than I anticipated!,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+Why is there an extra fee on my statement?,extra_charge_on_statement,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+Why is my cash withdrawal still showing as pending?,pending_cash_withdrawal,train
+"I have the cash already, my account still shows up as pending.  How can my account be still pending?",pending_cash_withdrawal,train
+I tried to get cash out of the ATM but it is taking too long,pending_cash_withdrawal,train
+Why is the cash withdrawal under pending?,pending_cash_withdrawal,train
+What does it mean if my cash withdrawal does not show up properly?,pending_cash_withdrawal,train
+"Hello, I have a pending transaction in my account due to an ATM machine that wasn't working. In any case if the transaction goes through, after how long can I get my money back?",pending_cash_withdrawal,train
+Why is my ATM withdrawal still pending?,pending_cash_withdrawal,train
+Is the cash withdrawal going to show?,pending_cash_withdrawal,train
+"Cash withdrawal has been pending, why is it so?",pending_cash_withdrawal,train
+My account shows up as pending after I received cash from the ATM earlier.  How can this be still pending? I've got the cash already.,pending_cash_withdrawal,train
+How long does it take to verify a cash withdraw?,pending_cash_withdrawal,train
+"The transaction for the cash I pulled out of the ATM earlier is pending in the app, but how if I already have the cash?",pending_cash_withdrawal,train
+Why has my withdrawal not posted?,pending_cash_withdrawal,train
+Why is the cash withdraw I made shown as pending?,pending_cash_withdrawal,train
+"Hello. I looked at my account and see that a transaction I tried to do is pending, but I did not complete that transaction. When I was at the ATM, the machine declined my card. Can you make sure that transaction does not go through because I definitely did not receive the money.",pending_cash_withdrawal,train
+Should my cash withdrawal still be pending?,pending_cash_withdrawal,train
+"Hey, I tried to withdraw some cash earlier and it's saying it's pending? Will I be charged for this?",pending_cash_withdrawal,train
+There should be a cash withdrawal that I haven't seen yet.,pending_cash_withdrawal,train
+Why is the app showing a still pending message on a withdraw that has already been done?,pending_cash_withdrawal,train
+Why is my cash withdrawal still pending?,pending_cash_withdrawal,train
+"If my cash withdrawal is still not showing, is something wrong?",pending_cash_withdrawal,train
+I noticed on my online statement that an ATM withdrawal I made early is still pending.  Is this accurate?,pending_cash_withdrawal,train
+I made a cash withdrawal at an ATM but it still says pending in my account.,pending_cash_withdrawal,train
+I tried to get cash at some ATM in the city centre earlier but the machine declined my card. I've seen it still shows up as pending in my account. Please cancel it immediately as I definitely have not received that money!,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I would like to know why a withdraw I made for some cash shows up as pending.,pending_cash_withdrawal,train
+I think someone is using my card without my permission!,compromised_card,train
+What do I do if I detect fraudulent use on my car?,compromised_card,train
+I think my account has been hacked there are charges on there I don't recognize.,compromised_card,train
+I don't recognize some transactions.  Is someone else using it?,compromised_card,train
+How do I stop fraud to my account?,compromised_card,train
+card is being used by someone else,compromised_card,train
+I think someone else is using my card.,compromised_card,train
+Someone might be using my card that is not me.,compromised_card,train
+There are strange transactions on my account.  What should I do if I think someone stole my details?,compromised_card,train
+I sees some suspicious spending on my credit card that I don't recall I had made. What should I do?,compromised_card,train
+"It looks like someone besides me ordered something with my card, what should I do?",compromised_card,train
+There are charges on my card that I haven't purchased.,compromised_card,train
+Someone might be using my card.  What should I do?,compromised_card,train
+I suspect someone used my card.,compromised_card,train
+Please tell me how you can stop unauthorized payments from being made on my card since on this bill I see that this has happened. There are transactions that I never made from a place I've never been to.,compromised_card,train
+I think that somebody is utilizing my card without my authorization!,compromised_card,train
+"There are a few transaction that I don't recognize, I think someone managed to get my card details and use it.",compromised_card,train
+Someone has been using my card. There are unfamiliar transactions on there. Can you freeze the card to keep this from happening?,compromised_card,train
+What can I do if my card details where stolen from my car? I think they used my card to buy gas.,compromised_card,train
+I want to cancel my card. I think someone else is using it.,compromised_card,train
+"I can't be sure, but I think that someone may be using my card.",compromised_card,train
+What should I do if I think someone is using my card without my permission?,compromised_card,train
+I believe that someone is using my card without my knowledge!,compromised_card,train
+There is unusual activity on my account and I believe someone took my card.,compromised_card,train
+Someone must have found my card details as I don't recognize these transactions.,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+I think someone is using my card without my permission!,compromised_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+I lost my wallet and all my cards were in it.,lost_or_stolen_card,train
+I'm panicking!  I lost my card!  Help!,lost_or_stolen_card,train
+I need to report a stolen card,lost_or_stolen_card,train
+How do I replace a stolen card?,lost_or_stolen_card,train
+Can you provide information for freezing my card immediately?,lost_or_stolen_card,train
+What's the phone number to freeze a card?,lost_or_stolen_card,train
+I can't find my card! Can you help?,lost_or_stolen_card,train
+"Hi, I am on vacation in Spain and someone stole my bag with my phone and wallet with cards and everything. Can you block it ASAP and then I want to order a new one also ASAP.",lost_or_stolen_card,train
+Help! I lost my card!,lost_or_stolen_card,train
+My card is missing.  Please help.,lost_or_stolen_card,train
+I think that my card has been stolen!,lost_or_stolen_card,train
+My card was stolen,lost_or_stolen_card,train
+A fee shouldn't apply to me if my card was stolen.,lost_or_stolen_card,train
+"My card has been stolen. I reported it with the police, but I need to report it with you as well.",lost_or_stolen_card,train
+Can you tell me the status of my new card?,lost_or_stolen_card,train
+My card has been stolen what do I do?,lost_or_stolen_card,train
+"I can't find my card, it is lost.",lost_or_stolen_card,train
+My card is lost!  Please help me!,lost_or_stolen_card,train
+I believe that my card has been stolen!,lost_or_stolen_card,train
+What should I do if I think my card was stolen?,lost_or_stolen_card,train
+Can you send me a new card and block my current one. I'm in Spain and my wallet was stolen.,lost_or_stolen_card,train
+"I thought I left my card at a restaurant, but they claim not to have it and now I don't have any idea where it is. I'm so worried that someone might be using it fraudulently. Is there any way to look into this?",lost_or_stolen_card,train
+My bag got stolen with all my cards. Can you please cancel my card and send a new one?,lost_or_stolen_card,train
+I think my card is stolen!,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+Has there been any activity on my card today?,lost_or_stolen_card,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+Has my top-up been cancelled?,top_up_reverted,train
+"I topped up recently and saw the money go through, but now it's just gone? What's going on",top_up_reverted,train
+For what reason did my top-up get cancelled?,top_up_reverted,train
+I think my top up has been reverted,top_up_reverted,train
+Has my top-up gone through?,top_up_reverted,train
+I went to top up my card and it was cancelled.,top_up_reverted,train
+I didn't cancel my top-up.,top_up_reverted,train
+I have a reverted top up I made and wanted to know why it didn't go through.,top_up_reverted,train
+I believe my top up was reverted.,top_up_reverted,train
+"My money is gone. I had topped up recently and saw it was there and went through, but now it's disappeared, what's going on?",top_up_reverted,train
+"Hello, I have tried using crypto top up but it is not working. I had some money in my account but I'm not sure what happened",top_up_reverted,train
+Why did my top up get reverted?,top_up_reverted,train
+What caused my top-up to be returned?,top_up_reverted,train
+What happened to my top-up? It was all done and now it's gone! Are you having problems with your system?,top_up_reverted,train
+Why was my top up reverted?,top_up_reverted,train
+Seems like my top-up has been cancelled,top_up_reverted,train
+Seems like my top up has been cancelled,top_up_reverted,train
+"My money has disappeared. I had recently added money in, and saw it was there and went through. Now it's gone. What is happening?",top_up_reverted,train
+"Something is wrong, my top-up is gone and I don't know what happened to my money.",top_up_reverted,train
+My money is nowhere to be found? I talked up earlier and seen it. Now it has vanished. What is going on?,top_up_reverted,train
+My top-up was cancelled and I am writing to ask if I need to complete the 3D Secure authentication section before I submit it.,top_up_reverted,train
+How come I can't put money in my top up account?,top_up_reverted,train
+Why has my top-up been reverted?,top_up_reverted,train
+My top up was reverted. Can you help?,top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+"My top up did not show up as shown and my money has disappeared, can you help me fix this glitch problem?",top_up_reverted,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+where is the code for verifying the top up card?,verify_top_up,train
+The top-up card is verified how?,verify_top_up,train
+Tell me about verifying top-up,verify_top_up,train
+What is the verification code for my top up card?,verify_top_up,train
+Explain to me how to verify the top-up card.,verify_top_up,train
+How can I verify my top-up card?,verify_top_up,train
+Can you show me how to verify the top-up card?,verify_top_up,train
+Can you explain to me the way to verify my top up has gone through?,verify_top_up,train
+I can't find the top-up card verification code.,verify_top_up,train
+I would like to receive instructions showing the verification process for top up cards..,verify_top_up,train
+Where is the top-up verification code located?,verify_top_up,train
+For what reason must I authenticate the top up?,verify_top_up,train
+what's my top-up verification code?,verify_top_up,train
+Why do the top-ups need to be verified?,verify_top_up,train
+Does the top-up need verified?,verify_top_up,train
+I am having trouble finding the top-up card verification code.,verify_top_up,train
+Why do you ask for top-up verification?,verify_top_up,train
+Where can I find the top up verification code?,verify_top_up,train
+How is top-up verified?,verify_top_up,train
+Do I need to verify my top-up card?,verify_top_up,train
+How do i verify my card?,verify_top_up,train
+What is the point of verifying a top up?,verify_top_up,train
+How do I verify my top up?,verify_top_up,train
+How do I find the top-up verification code?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+Do you know how I can verify that I did a top-up to my card?,verify_top_up,train
+How do I locate my card?,card_arrival,test
+"I still have not received my new card, I ordered over a week ago.",card_arrival,test
+I ordered a card but it has not arrived. Help please!,card_arrival,test
+Is there a way to know when my card will arrive?,card_arrival,test
+My card has not arrived yet.,card_arrival,test
+When will I get my card?,card_arrival,test
+Do you know if there is a tracking number for the new card you sent me?,card_arrival,test
+i have not received my card,card_arrival,test
+still waiting on that card,card_arrival,test
+Is it normal to have to wait over a week for my new card?,card_arrival,test
+How do I track my card?,card_arrival,test
+How long does a card delivery take?,card_arrival,test
+I still don't have my card after 2 weeks.  What should I do?,card_arrival,test
+still waiting on my new card,card_arrival,test
+I am still waiting for my card after 1 week.  Is this ok?,card_arrival,test
+"I have been waiting longer than expected for my bank card, could you provide information on when it will arrive?",card_arrival,test
+I've been waiting longer than expected for my card.,card_arrival,test
+Why hasn't my card been delivered?,card_arrival,test
+Where is my new card? I have been waiting a week!,card_arrival,test
+My card still hasn't arrived after 2 weeks. Is it lost?,card_arrival,test
+Why won't my card show up on the app?,card_linking,test
+I would like to reactivate my card.,card_linking,test
+Where do I link the new card?,card_linking,test
+"I have received my card, can you help me put it in the app?",card_linking,test
+How do I link a card that I already have?,card_linking,test
+"I received my new card, but I don't see it in the app anywhere.  What do I do?",card_linking,test
+How do I re-add a card to the app?,card_linking,test
+How do I add the card to my account?,card_linking,test
+Can I put my old card back into the system? I just found it/,card_linking,test
+"I have one of your cards already, how do I link it?",card_linking,test
+How do I link a new card?,card_linking,test
+Can I link an existing card?,card_linking,test
+How do I link one your card if I have one already?,card_linking,test
+How do I add a card to the app?,card_linking,test
+Can I link my new card?,card_linking,test
+"Hello, I found the card I misplaced and I need to reactive it, how do I do that?",card_linking,test
+Can you tell me how to link one of your cards that I already have?,card_linking,test
+How do I view the card I received in the app?,card_linking,test
+Where on the website do I go to link my card?,card_linking,test
+"I found my card, can I add it to the app?",card_linking,test
+I need to know your exchange rates.,exchange_rate,test
+What exchange rates do you offer?,exchange_rate,test
+How did you come up with your exchange rates?,exchange_rate,test
+Where do you guys acquire your exchange rate?,exchange_rate,test
+How do I find the exchange rate?,exchange_rate,test
+What are your international exchange rates?,exchange_rate,test
+How often do your exchange rates change,exchange_rate,test
+Please advise what is the exchange rate,exchange_rate,test
+How are exchange rates calculated?,exchange_rate,test
+what are exchange rates based on,exchange_rate,test
+what are exchange rates,exchange_rate,test
+What are the most current exchange rates?,exchange_rate,test
+Can you explain your exchange rate policy to me?,exchange_rate,test
+Is it a good time to exchange?,exchange_rate,test
+What is the exchange rate like on this app?,exchange_rate,test
+Do you have a list of exchange rates?,exchange_rate,test
+Can you tell me where you get your exchange rates?,exchange_rate,test
+Will I get a curreng foreign exchange rate?,exchange_rate,test
+What currencies is an exchange rate calculated in?,exchange_rate,test
+Where do you get your exchange rates from?,exchange_rate,test
+I payed with a card and was charged an extra fee,card_payment_fee_charged,test
+I was charged a fee after using my card and I shouldn't have been.,card_payment_fee_charged,test
+Is there a reason I was charged a fee for using my card as payment? I've never had an extra fee before.,card_payment_fee_charged,test
+"I show another charge on my card from when I used it, why?",card_payment_fee_charged,test
+"Why do I get charged additional fees on some payments, but not others?",card_payment_fee_charged,test
+I used my card for a purchase and was charged a fee,card_payment_fee_charged,test
+Why was I charged for card payment?,card_payment_fee_charged,test
+There is an unauthorized fee.,card_payment_fee_charged,test
+I would appreciate that someone let me know when there is an extra charge for payments. I was checking the app earlier and saying a charge on one of my payments that was additional that no one made me aware of before.,card_payment_fee_charged,test
+Why was I charged an extra fee when paying with my card?,card_payment_fee_charged,test
+Why did I have to pay extra because I paid with card?,card_payment_fee_charged,test
+Why are there fees for card usage?,card_payment_fee_charged,test
+im not sure what this charge is for,card_payment_fee_charged,test
+What is the fee charged with this card payment?,card_payment_fee_charged,test
+When would my card be charged an extra fee for a transaction?,card_payment_fee_charged,test
+Why did I have to pay more when I do it with my card?,card_payment_fee_charged,test
+I made a card payment and a fee is showing up?,card_payment_fee_charged,test
+I have been charged a fee for paying with card,card_payment_fee_charged,test
+What is the fee on my card payment?,card_payment_fee_charged,test
+Why would I be charged a fee for card payment?,card_payment_fee_charged,test
+My statement has a dollar I have been charged showing up on it.,extra_charge_on_statement,test
+Why is there a fee for an extra pound in my statement?,extra_charge_on_statement,test
+I'm not okay with this fee on my statement.,extra_charge_on_statement,test
+Why is there an extra dollar charged to my account?,extra_charge_on_statement,test
+There is a fee I don't recognize on my statement.,extra_charge_on_statement,test
+I would like a refund on the extra pound I was charged.,extra_charge_on_statement,test
+Can you explain what this random $1 charge is?,extra_charge_on_statement,test
+What is this $1 charge on my statement?,extra_charge_on_statement,test
+Why does my statement have these extra charges?,extra_charge_on_statement,test
+"I do not remember purchasing anything for 1£, and it is on my statement. Can you please tell me what that is about?",extra_charge_on_statement,test
+I can see an extra 1£ charge on my app. Why did you charge me extra?,extra_charge_on_statement,test
+Can you tell me why I noticed a $1 charge on my statement?,extra_charge_on_statement,test
+When will the $1 transaction be credited to me?,extra_charge_on_statement,test
+Where did this fee come from?,extra_charge_on_statement,test
+"I noticed an extra $1 charge on my statement, can you tell me why that is?",extra_charge_on_statement,test
+There is an extra $1 charge,extra_charge_on_statement,test
+I need information about an extra €1 fee in my statement.,extra_charge_on_statement,test
+Why is there an extra 1 pound charge on my card?,extra_charge_on_statement,test
+Why are there so many fees on my statement?,extra_charge_on_statement,test
+What would be the reason there's an extra fee on my statement?,extra_charge_on_statement,test
+My withdrawl is still pending.  Why?,pending_cash_withdrawal,test
+My card was denied at an ATM earlier today but the transaction is pending. Please cancel it as I did not receive my money.,pending_cash_withdrawal,test
+My transaction is still showing that is pending from my cash withdrawal.,pending_cash_withdrawal,test
+"Hey I tried to get some money out earlier but the machine didn't work. Now just saw the transaction still seems in progress! Can you please check what's going there, seems something is broken, I don't want to be charged for money that I haven't actually received!",pending_cash_withdrawal,test
+How long does the cash withdrawal take to pend?,pending_cash_withdrawal,test
+Why is it taking so long for my cash withdrawal to no longer show as pending?,pending_cash_withdrawal,test
+"I tried taking money from the ATM but no money came out, but the transaction is still pending? How is this possible?",pending_cash_withdrawal,test
+"I got some cash of an ATM earlier but this shows up as pending in the app. How can this be still pending, I've got the cash already?",pending_cash_withdrawal,test
+Why is my withdrawal still pending?,pending_cash_withdrawal,test
+Are you sure when the withdrawal will show?,pending_cash_withdrawal,test
+"Hi! I was wondering if you can help me. I used the city centre ATM to get some cash, but the machine declined my card. My account shows that transaction is still pending. I didn't receive the money, so please cancel that transaction.",pending_cash_withdrawal,test
+Why is a transaction showing as pending when I recieved cash from an ATM?,pending_cash_withdrawal,test
+My cash in the ATM is still pending,pending_cash_withdrawal,test
+my atm cash out is still pending,pending_cash_withdrawal,test
+I am still waiting for a cash withdrawal to show,pending_cash_withdrawal,test
+Is my pending cash withdrawal processed?,pending_cash_withdrawal,test
+how long til my cash out goes through?,pending_cash_withdrawal,test
+Why is my ATM cash withdrawal showing up as a pending transaction?,pending_cash_withdrawal,test
+"Hi,I tried to get some money out but the machine was not working .The transaction still seems in progress! Can you please check what's going on.I don't want to be charged for money that I did not received.",pending_cash_withdrawal,test
+"Hey, my card was declined at an ATM in the city centre theatre. My account says the transaction is pending, though. I didn't get the money, though, so what does that mean?",pending_cash_withdrawal,test
+I think someone is using my card to make transactions I don't remember.,compromised_card,test
+someone is using my account,compromised_card,test
+Someone I don't know has used my card without permission.,compromised_card,test
+My card was used without my permission.,compromised_card,test
+Can I freeze my card right now?,compromised_card,test
+Freeze my account it's been hacked.,compromised_card,test
+"There are transactions I didn't make, someone else must have used my card.",compromised_card,test
+Can you freeze my card because someone used it while I was out of town. I did not make these purchases.,compromised_card,test
+Someone is using my account to do online shopping! Please freeze it asap,compromised_card,test
+Someone else may be using my card.  There are transactions I don't recognize.,compromised_card,test
+What do I do to stop unauthorized transactions on my card? I was never in the place from which the transactions on my bill were made and I never made them. Please help!,compromised_card,test
+What do I do if I think my card was improperly used?,compromised_card,test
+How can I stop fraud on my account right now?,compromised_card,test
+"I think my identity has been stolen, can you check on unauthorized charges?",compromised_card,test
+I think someone else is using my card.  There are transactions I didn't make.,compromised_card,test
+"I don't recognize some of the transactions on my card, I think someone must have gotten my card info and used it.",compromised_card,test
+Can I use app to freeze account and dispute fraud?,compromised_card,test
+My card is being used online to make a bunch of purchases! Someone else is using it fraudulently. Can you help me freeze it?,compromised_card,test
+"Someone has my card number, freeze my account.",compromised_card,test
+"I see random purchases to my account, was it hacked?",compromised_card,test
+"My entire gym bag, including my wallet, was stolen out of my locker today. Everything in my wallet is gone - how do I block the card to make it can't be used?",lost_or_stolen_card,test
+I can't find my card and think it may have been stolen.,lost_or_stolen_card,test
+"Someone stole my card. I need to report it stolen. I made a police report already, but how do I report it with you?",lost_or_stolen_card,test
+"I cant find my card, it's gone.",lost_or_stolen_card,test
+My card is lost! What can I do?,lost_or_stolen_card,test
+Oh no!  I lost my card!  Help!,lost_or_stolen_card,test
+"I believe my card has been stolen, what can I do about this situation? It's urgent.",lost_or_stolen_card,test
+Help! Someone stole my card!,lost_or_stolen_card,test
+Help.  I have a stolen card!,lost_or_stolen_card,test
+"card is lost, please help",lost_or_stolen_card,test
+How do I report my card stolen?,lost_or_stolen_card,test
+My card is gone I think it was stolen,lost_or_stolen_card,test
+Is a copy of the police report necessary for completing the report process?,lost_or_stolen_card,test
+I lost my wallet today with all my credit cards. Will you please block the card and send a replacement?,lost_or_stolen_card,test
+How do I deal with a stolen card?,lost_or_stolen_card,test
+Can you freeze my card it was stolen,lost_or_stolen_card,test
+Help!  I can't find my card.,lost_or_stolen_card,test
+What should I do if I lost my card?,lost_or_stolen_card,test
+I need help with a lost card,lost_or_stolen_card,test
+I think my card was stolen.,lost_or_stolen_card,test
+My top-up was cancelled; will I receive a refund?,top_up_reverted,test
+How do I fix a reverted top up?,top_up_reverted,test
+Is it possible to tell if my top up has reverted?,top_up_reverted,test
+"My top-up showed as complete, but it's no longer there! What's going on here?",top_up_reverted,test
+"Hi, i don't know what's going on i've just paid for my top up twice by accident can you help me get a refund please.",top_up_reverted,test
+It seems my top up is reverted?,top_up_reverted,test
+The app wouldn't accept my top up.,top_up_reverted,test
+"I topped up my account and even though it was confirmed at first, the money isn't there anymore! why did this happen, and where did my money go?",top_up_reverted,test
+"I believe my money did not go through with my top up, was there a problem on your end?",top_up_reverted,test
+"My top-up was reverted, why did this happen?",top_up_reverted,test
+I put money into my account for the minimum balance but the application didn't accept.,top_up_reverted,test
+Can you tell me if my top-up has been cancelled?,top_up_reverted,test
+I got topped up but the application reverted it.,top_up_reverted,test
+Why would my top up be cancelled?,top_up_reverted,test
+There appears to have been a reversion in my top up,top_up_reverted,test
+The application reverted my top-up.,top_up_reverted,test
+I think my top-up was cancelled.,top_up_reverted,test
+I believed crypto top up with something you offered. This does not seem to be working. The money has been removed from my account though so what's going on?,top_up_reverted,test
+I topped up but the app reverted it,top_up_reverted,test
+I went to top up and it is no longer there.  Was it sent back?,top_up_reverted,test
+What all is needed to verify the top-up card?,verify_top_up,test
+It wants me to verify the top up. Why?,verify_top_up,test
+Where can I find the top-up verification code?,verify_top_up,test
+Why do I have to verify the top-up that I started?,verify_top_up,test
+Can you give me information about verification code?,verify_top_up,test
+What are the benefits to verifying the top-up?,verify_top_up,test
+how come the verification with the top up,verify_top_up,test
+Can I verify a top up?,verify_top_up,test
+reason i need to verify top up,verify_top_up,test
+Why do you need code verification for my top up?,verify_top_up,test
+Where can I find the verification code on a top-up card?,verify_top_up,test
+How do I get my top-up verification code?,verify_top_up,test
+Is it possible to verify a top up?,verify_top_up,test
+Is it normal to have to verify my top-up or is something wrong?,verify_top_up,test
+Why does the top-up need verification?,verify_top_up,test
+Why does top-up need verifying?,verify_top_up,test
+Is it necessary to verify my top up?,verify_top_up,test
+Why am i to verify the top-ups?,verify_top_up,test
+Where's the verification code for the top-up card?,verify_top_up,test
+How do I find the verification code for my top-up card?,verify_top_up,test

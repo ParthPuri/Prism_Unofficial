@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and environments
+.cache/
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Streamlit local config & caches
+.streamlit/
+
+# Temporary run outputs
+reports/latest/
+*.tmp

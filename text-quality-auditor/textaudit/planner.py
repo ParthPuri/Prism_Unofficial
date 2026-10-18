@@ -1,6 +1,7 @@
 """Bounded JSON policy planner. Compatible with a local chat-completions server."""
 import hashlib
 import json
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -54,6 +55,85 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         raise ValueError("Planner redirects are rejected; configure the exact endpoint.")
 
 
+def clean_and_repair_json(content: str) -> dict:
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError("Planner returned no text content.")
+    clean = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
+    start_idx = clean.find("{")
+    if start_idx != -1:
+        try:
+            obj, _ = json.JSONDecoder(strict=False).raw_decode(clean, start_idx)
+            if isinstance(obj, dict):
+                return obj
+        except Exception:
+            pass
+    fence_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", clean, re.DOTALL)
+    if fence_match:
+        candidate = fence_match.group(1).strip()
+    else:
+        last_idx = clean.rfind("}")
+        if start_idx != -1 and last_idx > start_idx:
+            candidate = clean[start_idx:last_idx + 1].strip()
+        else:
+            candidate = clean
+    try:
+        obj = json.loads(candidate, strict=False)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    text = candidate
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+    text = re.sub(r"(?<!:)//[^\n]*", "", text)
+    text = re.sub(r"\bTrue\b", "true", text)
+    text = re.sub(r"\bFalse\b", "false", text)
+    text = re.sub(r"\bNone\b", "null", text)
+    text = re.sub(r"}\s*\{", "}, {", text)
+    text = re.sub(r"}\s*\"", "}, \"", text)
+    text = re.sub(r'("(?:\\.|[^"\\])*"|[0-9]+(?:\.[0-9]+)?|true|false|null)\s*\n+\s*(")', r'\1,\n\2', text)
+    text = re.sub(r",\s*([\]}])", r"\1", text)
+    try:
+        obj = json.loads(text, strict=False)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    s_idx = text.find("{")
+    if s_idx != -1:
+        try:
+            obj, _ = json.JSONDecoder(strict=False).raw_decode(text, s_idx)
+            if isinstance(obj, dict):
+                return obj
+        except Exception:
+            pass
+    lines = text.splitlines()
+    repaired_lines = []
+    for line in lines:
+        m = re.match(r'^(\s*"[a-zA-Z0-9_]+"\s*:\s*")(.*)("\s*[,\]\}]?\s*)$', line)
+        if m:
+            prefix, body, suffix = m.group(1), m.group(2), m.group(3)
+            escaped_body = re.sub(r'(?<!\\)"', r'\"', body)
+            repaired_lines.append(prefix + escaped_body + suffix)
+        else:
+            repaired_lines.append(line)
+    quoted_text = "\n".join(repaired_lines)
+    try:
+        obj = json.loads(quoted_text, strict=False)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    s_idx = quoted_text.find("{")
+    if s_idx != -1:
+        try:
+            obj, _ = json.JSONDecoder(strict=False).raw_decode(quoted_text, s_idx)
+            if isinstance(obj, dict):
+                return obj
+        except Exception:
+            pass
+    return json.loads(candidate)
+
+
 def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
          cache_dir: Path, allow_remote: bool = False, timeout: float = 120,
          *, api_key: str | None = None, provider: str = "compatible",
@@ -68,8 +148,8 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
         raise ValueError("Remote planner endpoints require HTTPS.")
     if not use_case.strip() or len(use_case) > 12000:
         raise ValueError("Use case must contain 1..12000 characters.")
-    if not 1 <= timeout <= 600 or not 512 <= max_tokens <= 16000:
-        raise ValueError("Timeout must be 1..600 seconds and max_tokens 512..16000.")
+    if provider == "groq" and "qwen" in model.lower() and max_tokens > 950:
+        max_tokens = 950
     formatting=response_format(structured_schema)
     context_options = {}
     for purpose in ("supervised_training","retrieval_corpus","log_monitoring"):
@@ -98,8 +178,12 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
     # At most one repair call; dataset text is never part of the messages.
     for attempt in range(2):
         payload = {"model":model,"messages":messages,"temperature":0,
-                   "max_tokens":max_tokens,"response_format":formatting,"stream":False}
-        headers = {"Content-Type":"application/json"}
+                   "max_tokens":max_tokens,"stream":False}
+        if provider != "groq":
+            payload["response_format"] = formatting
+        elif "qwen" in model.lower():
+            payload["reasoning_effort"] = "none"
+        headers = {"Content-Type":"application/json", "User-Agent":"textaudit/0.3.0"}
         if api_key:
             headers["Authorization"] = "Bearer "+api_key
         request = urllib.request.Request(base_url.rstrip("/")+"/chat/completions",
@@ -112,11 +196,23 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
             with urllib.request.build_opener(*handlers).open(request,timeout=timeout) as response:
                 raw = response.read(1_000_001)
         except urllib.error.HTTPError as exc:
+            detail = ""
+            try:
+                err_raw = exc.read(2048).decode("utf-8", errors="ignore")
+                err_json = json.loads(err_raw)
+                if isinstance(err_json, dict):
+                    err_info = err_json.get("error", {})
+                    if isinstance(err_info, dict) and "message" in err_info:
+                        detail = " (" + str(err_info["message"]) + ")"
+                    elif isinstance(err_info, str):
+                        detail = " (" + err_info + ")"
+            except Exception:
+                pass
             hints={401:"Token rejected; check token permissions.",403:"Access denied; check model/provider permission.",
                    402:"Inference credit/payment is required by the provider.",
                    404:"Model or endpoint unavailable; check the configured model/provider.",
                    429:"Inference rate limit reached; retry later."}
-            raise ValueError(f"Planner HTTP {exc.code}. "+hints.get(exc.code,"Provider request failed; check model availability and structured-output support.")) from None
+            raise ValueError(f"Planner HTTP {exc.code}. "+hints.get(exc.code,"Provider request failed; check model availability and structured-output support.")+detail) from None
         if len(raw)>1_000_000:
             raise ValueError("Planner response exceeds 1 MB limit.")
         envelope = json.loads(raw)
@@ -127,10 +223,8 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
         if choice.get("finish_reason") == "length":
             raise ValueError("Planner output was truncated; increase --max-tokens or use a non-thinking instruction model.")
         content = choice.get("message",{}).get("content")
-        if not isinstance(content,str) or not content.strip():
-            raise ValueError("Planner returned no text content.")
         try:
-            candidate=json.loads(content)
+            candidate = clean_and_repair_json(content)
             if not isinstance(candidate,dict) or candidate.get("version") != 2:
                 raise ValueError("AI planner must return a version-2 context-aware policy.")
             policy = validate_policy(candidate,dataset)
@@ -139,7 +233,7 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
             error = str(exc)
             if attempt == 0:
                 messages += [{"role":"assistant","content":content},
-                             {"role":"user","content":"Validation failed: "+error+". Return a corrected complete JSON policy."}]
+                             {"role":"user","content":"Validation failed: "+error+". Return a corrected complete JSON policy starting with { and ending with } inside a ```json``` code block with no trailing commas, no unescaped quotes inside strings, and no commentary."}]
     else:
         raise ValueError("AI policy rejected after one repair attempt: "+str(error))
     # Validated policy only; no silent fallback to invented AI weights.

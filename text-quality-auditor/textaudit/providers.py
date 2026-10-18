@@ -4,8 +4,10 @@ import urllib.parse
 from dataclasses import dataclass
 
 HF_BASE_URL = "https://router.huggingface.co/v1"
-HF_MODEL = "Qwen/Qwen3-235B-A22B-Instruct-2507:nscale"
+HF_MODEL = "Qwen/Qwen3-235B-A22B-Instruct-2507"
 LOCAL_BASE_URL = "http://127.0.0.1:11434/v1"
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+GROQ_MODEL = "openai/gpt-oss-20b"
 
 
 @dataclass(frozen=True)
@@ -23,10 +25,15 @@ class Provider:
         token=os.getenv(self.token_env)
         if self.name=="huggingface" and not token:
             raise ValueError("HF_TOKEN is not set. Set a Hugging Face token with Inference Providers permission in your local environment; do not paste it into chat.")
+        if self.name=="groq" and not token:
+            raise ValueError("GROQ_API_KEY is not set. Set a Groq API key in your local environment or enter it in the dashboard.")
         return token
 
 
 def resolve_provider(name="huggingface",model=None,base_url=None,allow_remote=False) -> Provider:
+    if name=="groq":
+        endpoint=base_url or GROQ_BASE_URL
+        return Provider(name,model or GROQ_MODEL,endpoint,"GROQ_API_KEY",True,False)
     if name=="huggingface":
         if base_url and base_url.rstrip("/")!=HF_BASE_URL:
             raise ValueError("Hugging Face uses its fixed router endpoint. Use --provider compatible for a custom endpoint.")

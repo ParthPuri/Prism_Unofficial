@@ -123,7 +123,17 @@ If you enter a business context, select how the AI policy should be generated:
 
 ---
 
-**Option A — Local Ollama (free, recommended)**
+**Option A — Groq (Fast & Free Tier, Recommended)**
+
+Ultra-fast cloud inference with a generous free tier. No local model download required.
+
+1. Go to [console.groq.com/keys](https://console.groq.com/keys) and create a free API key.
+2. Select **Groq (recommended & fast)** in the dashboard and paste your API key (or set `GROQ_API_KEY` in your environment).
+3. Default model is `llama-3.3-70b-versatile` (or `llama-3.1-8b-instant`).
+
+---
+
+**Option B — Local Ollama (free, offline)**
 
 Runs entirely on your machine. No internet connection or account required.
 
@@ -143,7 +153,7 @@ Runs entirely on your machine. No internet connection or account required.
 
 ---
 
-**Option B — Hugging Face (requires paid credits)**
+**Option C — Hugging Face (requires paid credits)**
 
 Uses the Hugging Face Inference API. Requires an account with inference credits.
 
@@ -231,6 +241,36 @@ You will see a quality index of 99.94/100 with a BLOCKED verdict — blocked bec
 
 ---
 
+## Synthetic Corruption Benchmarks (Ground Truth Evaluation)
+
+To rigorously verify the auditor's detection accuracy, 11 dedicated synthetic benchmark datasets are bundled under `data/benchmarks/`:
+
+### Fatal Defect Benchmarks (Hard Gates → BLOCKED)
+1. **`benchmark_clean_baseline.csv`**: Pristine control baseline (1,000 clean rows, 10 balanced classes) → **100/100 Quality Index, CHECKS PASSED**.
+2. **`benchmark_split_leakage.csv`**: 25 training queries copied into the test split → **BLOCKED by split_disjointness**.
+3. **`benchmark_label_conflict.csv`**: 20 identical queries assigned contradictory labels → **BLOCKED by label_consistency**.
+4. **`benchmark_encoding_errors.csv`**: 20 queries with corrupt UTF-8 bytes and terminal codes → **BLOCKED by encoding_cleanliness**.
+5. **`benchmark_pii_leakage.csv`**: 20 queries with customer email addresses and phone numbers → **BLOCKED by privacy gate**.
+6. **`benchmark_empty_texts.csv`**: 15 blank, whitespace-only, or missing queries → **BLOCKED by text_completeness**.
+7. **`benchmark_invalid_labels.csv`**: 20 queries with hallucinated labels outside allowed classes → **BLOCKED by label_validity**.
+8. **`benchmark_length_anomalies.csv`**: 15 queries violating min/max character limits → **BLOCKED by length_validity**.
+
+### Graded Quality Benchmarks (Continuous Scoring → REVIEW_REQUIRED, 0 Blockers)
+9. **`benchmark_high_redundancy.csv`**: 55% repeated boilerplate queries → **~95.6/100 Quality Index, REVIEW_REQUIRED** (0 blockers).
+10. **`benchmark_class_imbalance.csv`**: Head classes have 80 rows, 2 tail classes have only 8 rows → **~97.0/100 Quality Index, REVIEW_REQUIRED** (0 blockers).
+11. **`benchmark_realistic_noise.csv`**: Production-like mix of repetitions, tail classes, and character quirks → **~94.6/100 Quality Index, REVIEW_REQUIRED** (0 blockers).
+
+### Running the Benchmark Accuracy Evaluator
+Run the automated evaluation script to verify all 11 benchmarks:
+```bash
+python scripts/verify_benchmarks.py
+```
+
+### Testing from the Dashboard
+In **Step 1 (Dataset)**, select any benchmark from the **"Choose dataset or benchmark"** dropdown, leave business context blank (or enter a custom context), and click **▶ Run Audit** to see the score, verdict, and findings.
+
+---
+
 ## File structure
 
 ```
@@ -239,9 +279,15 @@ text-quality-auditor/
 ├── textaudit/            ← auditor engine
 ├── data/
 │   ├── banking77/        ← BANKING77 dataset
-│   └── sms_spam/         ← SMS Spam dataset
+│   ├── sms_spam/         ← SMS Spam dataset
+│   └── benchmarks/       ← 8 synthetic corruption benchmark CSVs + ground_truth.json
 ├── policies/
-│   └── classification_demo.json   ← demo policy (no model needed)
+│   ├── classification_demo.json   ← demo policy (no model needed)
+│   ├── benchmark_policy.json      ← benchmark reference policy
+│   └── benchmark_pii_policy.json  ← benchmark policy with privacy gate
+├── scripts/
+│   ├── generate_benchmarks.py     ← reproducible benchmark generator
+│   └── verify_benchmarks.py       ← automated precision/recall accuracy evaluator
 ├── reports/              ← example audit outputs
 ├── tests/                ← automated tests
 └── USAGE_GUIDE.md        ← this file

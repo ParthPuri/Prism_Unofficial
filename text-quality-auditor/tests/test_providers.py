@@ -11,7 +11,7 @@ from urllib.error import HTTPError
 from textaudit.cli import main
 from textaudit.core import Config,LocalDataset
 from textaudit.planner import plan
-from textaudit.providers import HF_BASE_URL, HF_MODEL, resolve_provider
+from textaudit.providers import HF_BASE_URL, HF_MODEL, GROQ_BASE_URL, GROQ_MODEL, resolve_provider
 from scripts.context_demo import example_policies
 
 
@@ -94,6 +94,21 @@ class ProviderTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'truncated'):
                 plan(self.dataset,'Monitor events','test-model','http://127.0.0.1:11434/v1',self.root/'cache')
         self.assertEqual(list((self.root/'cache').glob('*.json')),[])
+
+    def test_groq_provider_resolution_and_credentials(self):
+        with patch.dict(os.environ,{'GROQ_API_KEY':'gsk_test_secret'}):
+            p=resolve_provider('groq')
+            self.assertEqual(p.base_url,GROQ_BASE_URL)
+            self.assertEqual(p.model,GROQ_MODEL)
+            self.assertEqual(p.credentials(),'gsk_test_secret')
+            self.assertTrue(p.allow_remote)
+            self.assertFalse(p.structured_schema)
+
+    def test_groq_missing_token_raises(self):
+        with patch.dict(os.environ,{},clear=True):
+            p=resolve_provider('groq')
+            with self.assertRaisesRegex(ValueError,'GROQ_API_KEY is not set'):
+                p.credentials()
 
 
 if __name__=='__main__': unittest.main()

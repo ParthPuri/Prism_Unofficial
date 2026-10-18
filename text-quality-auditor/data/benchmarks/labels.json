@@ -1,0 +1,12 @@
+[
+  "card_arrival",
+  "card_linking",
+  "exchange_rate",
+  "card_payment_fee_charged",
+  "extra_charge_on_statement",
+  "pending_cash_withdrawal",
+  "compromised_card",
+  "lost_or_stolen_card",
+  "top_up_reverted",
+  "verify_top_up"
+]

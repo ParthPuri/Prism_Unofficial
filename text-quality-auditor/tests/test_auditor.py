@@ -161,5 +161,23 @@ class AuditorTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             plan(d,"business","model","https://remote.example/v1",self.root/"cache")
 
+    def test_clean_and_repair_json(self):
+        from textaudit.planner import clean_and_repair_json
+        # 1. Trailing commas & python booleans
+        t1 = '{"version": 2, "metrics": [{"name": "m1", "gate": True,},], "parameters": {"min_chars": 1,},}'
+        self.assertEqual(clean_and_repair_json(t1)["parameters"]["min_chars"], 1)
+        # 2. Markdown fence with trailing commentary containing braces
+        t2 = 'Here is the JSON policy:\n```json\n{"version": 2, "acceptance_score": 90}\n```\nNote: {acceptance_score} >= 80.'
+        self.assertEqual(clean_and_repair_json(t2)["acceptance_score"], 90)
+        # 3. Missing comma between metrics array objects
+        t3 = '{"version": 2, "metrics": [{"name": "a"} {"name": "b"}]}'
+        self.assertEqual(len(clean_and_repair_json(t3)["metrics"]), 2)
+        # 4. Unescaped quotes inside rationale string
+        t4 = '{\n"version": 2,\n"rationale": "Ensures "high accuracy" for banking."\n}'
+        self.assertIn("accuracy", clean_and_repair_json(t4)["rationale"])
+        # 5. Missing commas between properties
+        t5 = '{\n"version": 2\n"acceptance_score": 95\n}'
+        self.assertEqual(clean_and_repair_json(t5)["acceptance_score"], 95)
+
 
 if __name__ == "__main__": unittest.main()
