@@ -1,0 +1,52 @@
+[
+  {
+    "text": "How do I activate my new debit card?",
+    "label": "card_activation",
+    "split": "train"
+  },
+  {
+    "text": "Can you track the delivery of my replacement card?",
+    "label": "card_arrival",
+    "split": "train"
+  },
+  {
+    "text": "There is an unrecognized fee on my monthly statement.",
+    "label": "extra_charge_on_statement",
+    "split": "train"
+  },
+  {
+    "text": "What is the current foreign exchange rate for EUR to USD?",
+    "label": "exchange_rate",
+    "split": "train"
+  },
+  {
+    "text": "My credit card was stolen in the train station yesterday.",
+    "label": "lost_or_stolen_card",
+    "split": "train"
+  },
+  {
+    "text": "Why did my cash withdrawal at the ATM fail?",
+    "label": "pending_cash_withdrawal",
+    "split": "train"
+  },
+  {
+    "text": "How long does an international bank transfer take?",
+    "label": "transfer_timing",
+    "split": "test"
+  },
+  {
+    "text": "Please cancel my lost bank card immediately.",
+    "label": "lost_or_stolen_card",
+    "split": "test"
+  },
+  {
+    "text": "Where can I see the exchange rates in the mobile app?",
+    "label": "exchange_rate",
+    "split": "test"
+  },
+  {
+    "text": "My card has not arrived yet after 10 business days.",
+    "label": "card_arrival",
+    "split": "test"
+  }
+]

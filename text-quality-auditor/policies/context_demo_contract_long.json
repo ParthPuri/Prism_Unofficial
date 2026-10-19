@@ -1,0 +1,141 @@
+{
+  "version": 2,
+  "parameters": {
+    "min_chars": 15,
+    "max_chars": 2000,
+    "min_class_examples": 20
+  },
+  "acceptance_score": 90,
+  "rationale": "Explicit demonstration of contextual utility. Anchors and weights are illustrative, not empirically calibrated or AI-generated.",
+  "context": {
+    "purpose": "supervised_training",
+    "privacy": "retain",
+    "description": "Formal legal contract clause analyzer: short fragments under 15 characters represent extraction corruption.",
+    "assumptions": [
+      "Public SMS content is permitted for this example.",
+      "Only implemented structural quality dimensions are assessed."
+    ]
+  },
+  "metrics": [
+    {
+      "name": "text_type",
+      "weight": 0.124,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "text_completeness",
+      "weight": 0.096,
+      "pass_min": 0.99,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "label_completeness",
+      "weight": 0.096,
+      "pass_min": 0.99,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "label_consistency",
+      "weight": 0.12,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "label_validity",
+      "weight": 0.064,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "split_completeness",
+      "weight": 0.04,
+      "pass_min": 1,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.95,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "encoding_cleanliness",
+      "weight": 0.04,
+      "pass_min": 0.99,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "class_support",
+      "weight": 0.12,
+      "pass_min": 1,
+      "gate": false,
+      "utility": {
+        "type": "linear",
+        "bad": 0,
+        "good": 1
+      },
+      "rationale": "Supervised BANKING77 banking-support intent classifier: prioritize label integrity, per-class support and independent evaluation splits; preserve legitimate short customer queries."
+    },
+    {
+      "name": "length_validity",
+      "weight": 0.15,
+      "pass_min": 0.99,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.9,
+        "good": 1.0
+      },
+      "rationale": "Legal clauses under 15 characters are truncated corrupt extractions and block ingestion."
+    },
+    {
+      "name": "split_disjointness",
+      "weight": 0.15,
+      "pass_min": 1.0,
+      "gate": true,
+      "utility": {
+        "type": "linear",
+        "bad": 0.99,
+        "good": 1.0
+      },
+      "rationale": "Evaluation split independence."
+    }
+  ]
+}

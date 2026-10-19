@@ -1,0 +1,11 @@
+text,label,split
+How do I activate my new debit card?,card_activation,train
+Can you track the delivery of my replacement card?,card_arrival,train
+There is an unrecognized fee on my monthly statement.,extra_charge_on_statement,train
+What is the current foreign exchange rate for EUR to USD?,exchange_rate,train
+My credit card was stolen in the train station yesterday.,lost_or_stolen_card,train
+Why did my cash withdrawal at the ATM fail?,pending_cash_withdrawal,train
+How long does an international bank transfer take?,transfer_timing,test
+Please cancel my lost bank card immediately.,lost_or_stolen_card,test
+Where can I see the exchange rates in the mobile app?,exchange_rate,test
+My card has not arrived yet after 10 business days.,card_arrival,test

@@ -155,6 +155,36 @@ METRIC_INFO = {
 }
 
 EXAMPLE_CONTEXTS = {
+    # ── Context Sensitivity Demonstrations (Same Data, Different Business Context) ──
+    "Context Demo 1A: Customer Support FAQ (High repetition accepted)": (
+        "Train an automated FAQ customer support assistant. Common questions naturally share "
+        "repetitive boilerplate phrasing across customers. Do NOT penalize query repetition; "
+        "prioritize label consistency and split independence."
+    ),
+    "Context Demo 1B: Pretraining Corpus (High repetition penalized)": (
+        "Train a diverse generative language model pretraining corpus. Repetitive boilerplate "
+        "and duplicate phrases degrade vocabulary entropy and must be heavily penalized. "
+        "Require high lexical uniqueness."
+    ),
+    "Context Demo 2A: Public Feedback Desk (Contact details permitted)": (
+        "Ingest public customer support feedback forms. Customers voluntarily provide email "
+        "addresses and contact phone numbers for case callbacks. Personal contact details are "
+        "legitimately retained for operations; do NOT block the pipeline for PII."
+    ),
+    "Context Demo 2B: Strict Regulatory Banking (Zero PII, Redaction Required)": (
+        "Train an internal banking intent model under strict GDPR compliance. Absolutely zero "
+        "unredacted customer emails or phone numbers may enter training data. Complete redaction "
+        "is mandatory and unredacted PII must block the pipeline."
+    ),
+    "Context Demo 3A: Conversational SMS Chat (Short queries accepted)": (
+        "Train a conversational SMS mobile assistant. Natural 1-word user answers (such as "
+        "'ok', 'hi', 'yes') are valid user inputs. Short queries are acceptable."
+    ),
+    "Context Demo 3B: Formal Legal Contract Extraction (Short fragments blocked)": (
+        "Extract formal legal clauses from corporate agreements. Queries shorter than 15 characters "
+        "indicate corrupted document OCR and truncation. Enforce strict character bounds."
+    ),
+    # ── General Benchmarks and Production Baselines ──
     "BANKING77 — intent classifier": (
         "Train a 77-intent banking customer-support classifier. "
         "Evaluate generalisation on the publisher test split. "
@@ -214,7 +244,97 @@ EXAMPLE_CONTEXTS = {
     "Custom (type your own)": "",
 }
 
+# Mapping of Context Preset to its offline pre-computed policy for instant zero-key testing
+CONTEXT_OFFLINE_POLICIES = {
+    "Context Demo 1A: Customer Support FAQ (High repetition accepted)": {
+        "policy": WORKSPACE / "policies" / "context_demo_faq_lenient.json",
+        "require_redacted": False,
+    },
+    "Context Demo 1B: Pretraining Corpus (High repetition penalized)": {
+        "policy": WORKSPACE / "policies" / "context_demo_diversity_strict.json",
+        "require_redacted": False,
+    },
+    "Context Demo 2A: Public Feedback Desk (Contact details permitted)": {
+        "policy": WORKSPACE / "policies" / "context_demo_feedback_retain.json",
+        "require_redacted": False,
+    },
+    "Context Demo 2B: Strict Regulatory Banking (Zero PII, Redaction Required)": {
+        "policy": WORKSPACE / "policies" / "context_demo_gdpr_redacted.json",
+        "require_redacted": True,
+    },
+    "Context Demo 3A: Conversational SMS Chat (Short queries accepted)": {
+        "policy": WORKSPACE / "policies" / "context_demo_sms_short.json",
+        "require_redacted": False,
+    },
+    "Context Demo 3B: Formal Legal Contract Extraction (Short fragments blocked)": {
+        "policy": WORKSPACE / "policies" / "context_demo_contract_long.json",
+        "require_redacted": False,
+    },
+}
+
 DATASET_PRESETS = {
+    # ── Context Sensitivity Synthetic Test Datasets ──
+    "🧪 Context Test 1A: Repetitive Queries (Under FAQ Assistant context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_faq_chat.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 1A: Customer Support FAQ (High repetition accepted)",
+        "policy": WORKSPACE / "policies" / "context_demo_faq_lenient.json",
+        "require_redacted": False,
+        "desc": "Demonstrates Context Sensitivity: 350 duplicate FAQ queries. Evaluated as FAQ Assistant → Score: 100/100, PASSED.",
+    },
+    "🧪 Context Test 1B: Repetitive Queries (Under Pretraining Corpus context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_faq_chat.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 1B: Pretraining Corpus (High repetition penalized)",
+        "policy": WORKSPACE / "policies" / "context_demo_diversity_strict.json",
+        "require_redacted": False,
+        "desc": "Demonstrates Context Sensitivity: EXACT same 350 duplicate queries. Evaluated as Pretraining Corpus → Score drops to ~70/100.",
+    },
+    "🧪 Context Test 2A: Customer Feedback with Contacts (Under Public Feedback context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_customer_feedback.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 2A: Public Feedback Desk (Contact details permitted)",
+        "policy": WORKSPACE / "policies" / "context_demo_feedback_retain.json",
+        "require_redacted": False,
+        "desc": "Demonstrates Context Sensitivity: Customer queries with emails & phones. Evaluated as Public Feedback → Score: 100/100, PASSED.",
+    },
+    "🧪 Context Test 2B: Customer Feedback with Contacts (Under Strict Banking GDPR context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_customer_feedback.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 2B: Strict Regulatory Banking (Zero PII, Redaction Required)",
+        "policy": WORKSPACE / "policies" / "context_demo_gdpr_redacted.json",
+        "require_redacted": True,
+        "desc": "Demonstrates Context Sensitivity: EXACT same customer feedback. Evaluated as Banking GDPR → BLOCKED by privacy clearance gate.",
+    },
+    "🧪 Context Test 3A: Short Queries (Under Conversational SMS Assistant context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_short_queries.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 3A: Conversational SMS Chat (Short queries accepted)",
+        "policy": WORKSPACE / "policies" / "context_demo_sms_short.json",
+        "require_redacted": False,
+        "desc": "Demonstrates Context Sensitivity: Contains 1-word inputs ('ok', 'hi'). Evaluated as SMS Assistant → Score: 100/100, PASSED.",
+    },
+    "🧪 Context Test 3B: Short Queries (Under Formal Legal Contract context)": {
+        "path": WORKSPACE / "data" / "synthetic_demo_short_queries.csv",
+        "label": "label",
+        "split": "split",
+        "labels_path": WORKSPACE / "data" / "benchmarks" / "labels.json",
+        "context_preset": "Context Demo 3B: Formal Legal Contract Extraction (Short fragments blocked)",
+        "policy": WORKSPACE / "policies" / "context_demo_contract_long.json",
+        "require_redacted": False,
+        "desc": "Demonstrates Context Sensitivity: EXACT same short queries. Evaluated as Legal Extraction → BLOCKED by length_validity gate.",
+    },
+    # ── Production Datasets ──
     "BANKING77 (Full real-world dataset)": {
         "path": WORKSPACE / "data" / "banking77" / "dataset.csv",
         "label": "label",
@@ -235,6 +355,7 @@ DATASET_PRESETS = {
         "require_redacted": False,
         "desc": "SMS Spam vs Ham binary classification dataset (5,574 messages).",
     },
+    # ── Benchmark Verification Suite ──
     "Benchmark 0: Clean Baseline (100% Quality Index)": {
         "path": WORKSPACE / "data" / "benchmarks" / "benchmark_clean_baseline.csv",
         "label": "label",
@@ -584,6 +705,9 @@ with st.sidebar:
             index=list(EXAMPLE_CONTEXTS.keys()).index(_context_preset),
         )
         default_context = EXAMPLE_CONTEXTS[preset_choice]
+        if preset_choice in CONTEXT_OFFLINE_POLICIES:
+            _policy_path = CONTEXT_OFFLINE_POLICIES[preset_choice]["policy"]
+            _require_redacted = CONTEXT_OFFLINE_POLICIES[preset_choice]["require_redacted"]
     else:
         preset_choice = "Custom (type your own)"
         default_context = ""
@@ -591,23 +715,29 @@ with st.sidebar:
     business_context = st.text_area(
         "Describe what this dataset is for",
         value=default_context,
-        height=150,
+        height=140,
         placeholder=(
             "e.g. Train a banking intent classifier. "
             "Missing labels are unacceptable. "
             "Prioritise split independence."
         ),
         help=(
-            "Leave blank to use the demo policy (no model needed). "
-            "Fill in to have the AI generate a policy tailored to your use case "
-            "(requires HF_TOKEN below)."
+            "Leave blank or use pre-computed demo policies for instant offline evaluation (no API key needed). "
+            "Or toggle AI policy generation to have an LLM synthesize the policy."
         ),
     )
 
-    use_ai = business_context.strip() != ""
+    # Allow users with AI keys to generate dynamic policies from prompt, or evaluate instantly with pre-computed policy
+    is_offline_preset = preset_choice in CONTEXT_OFFLINE_POLICIES or (dataset_mode == "Use a bundled example" and _policy_path is not None)
+    
+    if is_offline_preset:
+        use_ai = st.checkbox("Generate dynamic policy using LLM (instead of bundled policy)", value=False,
+                             help="Uncheck to run instantly offline using the pre-computed policy for this context. Check to call Groq/Ollama/HF.")
+    else:
+        use_ai = business_context.strip() != ""
 
     if use_ai:
-        st.info("AI policy will be generated from your context.", icon="🤖")
+        st.info("AI policy will be generated dynamically by LLM.", icon="🤖")
 
         provider_choice = st.selectbox(
             "Inference provider",
