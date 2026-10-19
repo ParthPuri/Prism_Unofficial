@@ -198,19 +198,25 @@ def plan(dataset: LocalDataset, use_case: str, model: str, base_url: str,
         except urllib.error.HTTPError as exc:
             detail = ""
             try:
-                err_raw = exc.read(2048).decode("utf-8", errors="ignore")
+                err_raw = exc.read(4096).decode("utf-8", errors="ignore")
                 err_json = json.loads(err_raw)
-                if isinstance(err_json, dict):
+                if isinstance(err_json, list) and len(err_json) > 0 and isinstance(err_json[0], dict):
+                    err_info = err_json[0].get("error", {})
+                elif isinstance(err_json, dict):
                     err_info = err_json.get("error", {})
-                    if isinstance(err_info, dict) and "message" in err_info:
-                        detail = " (" + str(err_info["message"]) + ")"
-                    elif isinstance(err_info, str):
-                        detail = " (" + err_info + ")"
+                else:
+                    err_info = {}
+                if isinstance(err_info, dict) and "message" in err_info:
+                    detail = " (" + str(err_info["message"]) + ")"
+                elif isinstance(err_info, str):
+                    detail = " (" + err_info + ")"
+                elif err_raw.strip():
+                    detail = " (" + err_raw.strip()[:180] + ")"
             except Exception:
                 pass
             hints={401:"Token rejected; check token permissions.",403:"Access denied; check model/provider permission.",
                    402:"Inference credit/payment is required by the provider.",
-                   404:"Model or endpoint unavailable; check the configured model/provider.",
+                   404:"Model or endpoint unavailable; check the configured model name or provider endpoint.",
                    429:"Inference rate limit reached; retry later."}
             raise ValueError(f"Planner HTTP {exc.code}. "+hints.get(exc.code,"Provider request failed; check model availability and structured-output support.")+detail) from None
         if len(raw)>1_000_000:

@@ -35,6 +35,26 @@ def get_available_groq_models(api_key: str) -> list[str]:
     except Exception:
         return []
 
+
+@st.cache_data(ttl=300, show_spinner=False)
+def get_available_gemini_models(api_key: str) -> list[str]:
+    if not api_key or not api_key.strip():
+        return []
+    try:
+        req = urllib.request.Request(
+            "https://generativelanguage.googleapis.com/v1beta/openai/models",
+            headers={"Authorization": f"Bearer {api_key.strip()}", "User-Agent": "textaudit/0.3.0"}
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode())
+            raw_models = [m["id"] for m in data.get("data", [])]
+            # Strip models/ prefix if present
+            cleaned = [m.replace("models/", "") for m in raw_models if "embedding" not in m.lower() and "aqa" not in m.lower()]
+            return sorted(cleaned) if cleaned else []
+    except Exception:
+        return []
+
+
 # ── page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Text Quality Auditor",
@@ -577,6 +597,8 @@ def run_audit(
     ollama_model: str | None,
     groq_api_key: str | None = None,
     groq_model: str | None = None,
+    gemini_api_key: str | None = None,
+    gemini_model: str | None = None,
     policy_path: Path | None = None,
     require_redacted: bool = False,
 ) -> dict:
@@ -598,7 +620,13 @@ def run_audit(
 
     if use_case and use_case.strip():
         cmd += ["--use-case", use_case.strip()]
-        if provider_choice == "Groq (recommended & fast)":
+        if provider_choice == "Google AI Studio / Gemini (free tier)":
+            cmd += ["--provider", "gemini", "--allow-remote"]
+            if gemini_model and gemini_model.strip():
+                cmd += ["--model", gemini_model.strip()]
+            if gemini_api_key and gemini_api_key.strip():
+                env["GEMINI_API_KEY"] = gemini_api_key.strip()
+        elif provider_choice == "Groq (recommended & fast)":
             cmd += ["--provider", "groq", "--allow-remote"]
             if groq_model and groq_model.strip():
                 cmd += ["--model", groq_model.strip()]
@@ -741,15 +769,59 @@ with st.sidebar:
 
         provider_choice = st.selectbox(
             "Inference provider",
-            ["Groq (recommended & fast)", "Local Ollama (free)", "Hugging Face (paid)"],
+            [
+                "Google AI Studio / Gemini (free tier)",
+                "Groq (recommended & fast)",
+                "Local Ollama (free)",
+                "Hugging Face (paid)"
+            ],
             help=(
-                "Groq is ultra-fast with generous free tier (console.groq.com). "
-                "Ollama is free and runs locally offline. "
-                "Hugging Face requires paid inference credits."
+                "Google AI Studio: generous free tier with Gemini 2.5 Flash / Pro (aistudio.google.com). "
+                "Groq: ultra-fast inference (console.groq.com). "
+                "Ollama: runs locally offline. "
+                "Hugging Face: requires paid inference credits."
             ),
         )
 
-        if provider_choice == "Groq (recommended & fast)":
+        if provider_choice == "Google AI Studio / Gemini (free tier)":
+            gemini_api_key = st.text_input(
+                "Google AI Studio API key (GEMINI_API_KEY)",
+                value=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY", ""),
+                type="password",
+                help="Create for free at aistudio.google.com/app/apikey.",
+            )
+            live_gemini = get_available_gemini_models(gemini_api_key)
+            if live_gemini:
+                prioritized = [m for m in ("gemini-3.8-flash", "gemini-3.8-pro", "gemini-2.5-flash", "gemini-2.0-flash") if m in live_gemini]
+                rest = [m for m in live_gemini if m not in prioritized]
+                gemini_models = (prioritized or ["gemini-3.8-flash"]) + rest + ["Custom (type your own)"]
+            else:
+                gemini_models = [
+                    "gemini-3.8-flash",
+                    "gemini-3.8-pro",
+                    "gemini-2.5-flash",
+                    "gemini-2.0-flash",
+                    "Custom (type your own)"
+                ]
+            gemini_model_choice = st.selectbox(
+                "Model",
+                gemini_models,
+                index=0,
+                help="Gemini 3.8 Flash is Google's latest recommended high-speed instruction model.",
+            )
+            st.caption("✨ **gemini-3.8-flash** is Google's state-of-the-art fast multimodal model with free tier quotas.")
+            if gemini_model_choice == "Custom (type your own)":
+                gemini_model = st.text_input("Enter Gemini Model ID", value="gemini-3.8-flash")
+            else:
+                gemini_model = gemini_model_choice
+            hf_token = None
+            hf_model = None
+            ollama_model = None
+            groq_api_key = None
+            groq_model = None
+        elif provider_choice == "Groq (recommended & fast)":
+            gemini_api_key = None
+            gemini_model = None
             groq_api_key = st.text_input(
                 "Groq API key (GROQ_API_KEY)",
                 value=os.getenv("GROQ_API_KEY", ""),
@@ -779,6 +851,8 @@ with st.sidebar:
             hf_model = None
             ollama_model = None
         elif provider_choice == "Hugging Face (paid)":
+            gemini_api_key = None
+            gemini_model = None
             hf_token = st.text_input(
                 "Hugging Face token (HF_TOKEN)",
                 type="password",
@@ -793,6 +867,8 @@ with st.sidebar:
             groq_api_key = None
             groq_model = None
         else:
+            gemini_api_key = None
+            gemini_model = None
             st.caption("Make sure Ollama is running: `ollama serve` and the model is pulled.")
             ollama_model = st.text_input(
                 "Ollama model name",
@@ -805,6 +881,8 @@ with st.sidebar:
             groq_model = None
     else:
         st.caption("No context → demo policy used (works offline, no model needed).")
+        gemini_api_key = None
+        gemini_model = None
         hf_token = None
         hf_model = None
         ollama_model = None
@@ -853,6 +931,13 @@ if dataset_mode == "Upload custom dataset" and uploaded_file is None:
     st.error("Please upload a dataset file before running the audit.")
     st.stop()
 
+if use_ai and provider_choice == "Google AI Studio / Gemini (free tier)" and not (gemini_api_key and gemini_api_key.strip()):
+    st.error(
+        "You selected Google AI Studio but didn't enter an API key. "
+        "Add your GEMINI_API_KEY (from aistudio.google.com/app/apikey), switch to another provider, or uncheck LLM policy generation to run with the bundled policy."
+    )
+    st.stop()
+
 if use_ai and provider_choice == "Groq (recommended & fast)" and not (groq_api_key and groq_api_key.strip()):
     st.error(
         "You selected Groq but didn't enter an API key. "
@@ -899,6 +984,8 @@ with st.spinner("Running audit…"):
                 ollama_model=ollama_model,
                 groq_api_key=groq_api_key,
                 groq_model=groq_model,
+                gemini_api_key=gemini_api_key,
+                gemini_model=gemini_model,
                 policy_path=_policy_path,
                 require_redacted=_require_redacted,
             )

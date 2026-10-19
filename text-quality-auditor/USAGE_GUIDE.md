@@ -121,17 +121,27 @@ If you enter a business context, select how the AI policy should be generated:
 
 ---
 
-**Option A — Groq (Fast & Free Tier, Recommended)**
+**Option A — Google AI Studio / Gemini (Free Tier, Recommended)**
 
-Ultra-fast cloud inference with a generous free tier. No local model download required.
+Generous free-tier cloud inference using Google's frontier Gemini models (`gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-2.0-flash`).
 
-1. Go to [console.groq.com/keys](https://console.groq.com/keys) and create a free API key.
-2. Select **Groq (recommended & fast)** in the dashboard and paste your API key (or set `GROQ_API_KEY` in your environment).
-3. Default model is `llama-3.3-70b-versatile` (or `llama-3.1-8b-instant`).
+1. Go to [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) and create a free API key.
+2. Select **Google AI Studio / Gemini (free tier)** in the dashboard and paste your API key (or set `GEMINI_API_KEY` or `GOOGLE_API_KEY` in your environment).
+3. Default model is `gemini-2.5-flash` (fast, structured policy planning).
 
 ---
 
-**Option B — Local Ollama (free, offline)**
+**Option B — Groq (Fast & Free Tier)**
+
+Ultra-fast cloud inference with generous free tier quotas.
+
+1. Go to [console.groq.com/keys](https://console.groq.com/keys) and create a free API key.
+2. Select **Groq (recommended & fast)** in the dashboard and paste your API key (or set `GROQ_API_KEY` in your environment).
+3. Default model is `openai/gpt-oss-20b` or `qwen/qwen3.8-27b`.
+
+---
+
+**Option C — Local Ollama (free, offline)**
 
 Runs entirely on your machine. No internet connection or account required.
 

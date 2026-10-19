@@ -69,7 +69,7 @@ def main(argv=None):
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--policy",type=Path,help="Explicit saved policy; not described as AI-generated")
     source.add_argument("--use-case",help="Business context for an AI policy; do not enter secrets")
-    parser.add_argument("--provider",choices=["huggingface","groq","local","compatible"],default="huggingface")
+    parser.add_argument("--provider",choices=["gemini","google","groq","huggingface","local","compatible"],default="huggingface")
     parser.add_argument("--model",help="Hosted model ID or exact locally installed model name")
     parser.add_argument("--base-url",help="Override local or compatible endpoint")
     parser.add_argument("--allow-remote",action="store_true")

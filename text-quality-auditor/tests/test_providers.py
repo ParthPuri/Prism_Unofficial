@@ -104,11 +104,27 @@ class ProviderTests(unittest.TestCase):
             self.assertTrue(p.allow_remote)
             self.assertFalse(p.structured_schema)
 
-    def test_groq_missing_token_raises(self):
+    def test_gemini_provider_resolution_and_credentials(self):
+        with patch.dict(os.environ,{'GEMINI_API_KEY':'gemini_test_secret'}):
+            p=resolve_provider('gemini')
+            self.assertEqual(p.name,'gemini')
+            self.assertEqual(p.base_url,'https://generativelanguage.googleapis.com/v1beta/openai')
+            self.assertEqual(p.model,'gemini-3.8-flash')
+            self.assertEqual(p.credentials(),'gemini_test_secret')
+            self.assertTrue(p.allow_remote)
+            self.assertFalse(p.structured_schema)
+
+    def test_gemini_google_api_key_fallback(self):
+        with patch.dict(os.environ,{'GOOGLE_API_KEY':'google_fallback_secret'},clear=True):
+            p=resolve_provider('google')
+            self.assertEqual(p.credentials(),'google_fallback_secret')
+
+    def test_gemini_missing_token_raises(self):
         with patch.dict(os.environ,{},clear=True):
-            p=resolve_provider('groq')
-            with self.assertRaisesRegex(ValueError,'GROQ_API_KEY is not set'):
+            p=resolve_provider('gemini')
+            with self.assertRaisesRegex(ValueError,'GEMINI_API_KEY'):
                 p.credentials()
 
 
 if __name__=='__main__': unittest.main()
+
